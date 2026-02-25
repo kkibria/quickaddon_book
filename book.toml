@@ -3,7 +3,7 @@ authors = ["Khan Kibria"]
 language = "en"
 # multilingual = false
 src = "booksrc"
-title = "QuickAddon: The Blender Add-on Maker"
+title = "QuickAddon: The Blender Add-on Maker (Draft)"
 
 [build]
 build-dir = "gh-pages/docs"

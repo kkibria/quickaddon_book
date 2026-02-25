@@ -16,7 +16,7 @@ Go to the **Scripting** workspace and locate the **Python Console**.
 
 Type:
 
-```
+```python
 >>> import addon_utils
 >>> addon_utils.paths()
 [

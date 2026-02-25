@@ -2,39 +2,46 @@
 """
 deploy_ghpages.py
 
-Cross-platform GitHub Pages deploy for mdBook projects.
+Disposable GitHub Pages deploy for mdBook projects.
 
-Guards (seatbelts):
-1) Must be run from the git repo root (cwd == git rev-parse --show-toplevel).
-2) Must have book.toml in cwd.
-3) Must have explicit [build].build-dir in book.toml.
-4) build-dir must be either "gh-pages" or start with "gh-pages/".
-5) Refuse if the pages repo dir (gh-pages) is tracked by the main repo.
-6) Warn (but do not refuse) if the pages repo dir (gh-pages) is not ignored.
+Philosophy:
+- main branch is source of truth
+- gh-pages is an artifact channel (no history needed)
+- every deploy creates a fresh orphan commit and force-pushes it
 
-Deploy behavior:
-- Runs `mdbook build`.
-- Uses first component of build-dir as pages repo dir (gh-pages).
-- Uses remainder as content subpath (e.g. docs).
-- Ensures gh-pages/.git exists, origin matches main repo origin,
-  ensures branch gh-pages exists (orphan init if needed),
-  stages only the content subtree, commits if changed, pushes.
+Key behaviors:
+- Must run from git repo root (cwd == git rev-parse --show-toplevel)
+- Must have book.toml in cwd
+- Reads [build].build-dir from book.toml
+- Requires build-dir to be "gh-pages/docs" (or under "gh-pages/...", but we enforce docs by default)
+- Runs `mdbook build`
+- Audits deploy_root using project_root/deploy.toml via audit(project_root, deploy_root)
+- Creates a temporary git worktree, wipes it, copies only audited files into `docs/`
+- Commits and `git push -f origin gh-pages`
 
-Requirements:
-- git on PATH
-- mdbook on PATH
+Dry run:
+- `--dry-run` prints audited file list and exits (no git mutation)
+
+Requires:
+- git, mdbook on PATH
+- audit_deploy.py (same folder or importable) providing:
+    - audit(project_root, deploy_root) -> list[str] (paths relative to deploy_root)
+    - DeployTomlNotFoundError
 """
 
 from __future__ import annotations
 
+import argparse
 import os
 import re
-import shlex
+import shutil
 import subprocess
 import sys
+import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Iterable, Optional
+from typing import Optional
+
 from .audit_deploy import audit, DeployTomlNotFoundError
 
 BRANCH = "gh-pages"
@@ -45,11 +52,14 @@ class DeployError(RuntimeError):
     pass
 
 
+def which_or_die(exe: str) -> None:
+    if shutil.which(exe) is None:
+        raise DeployError(f"Missing required command on PATH: {exe}")
+
+
 def run(cmd: list[str], cwd: Optional[Path] = None, check: bool = True) -> subprocess.CompletedProcess[str]:
-    pretty = " ".join(shlex.quote(c) for c in cmd)
-    print(f"running {pretty}")
     try:
-        cp = subprocess.run(
+        return subprocess.run(
             cmd,
             cwd=str(cwd) if cwd else None,
             check=check,
@@ -57,8 +67,8 @@ def run(cmd: list[str], cwd: Optional[Path] = None, check: bool = True) -> subpr
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
         )
-        return cp
     except subprocess.CalledProcessError as e:
+        pretty = " ".join(cmd)
         raise DeployError(
             f"Command failed: {pretty}\n"
             f"cwd: {cwd or Path.cwd()}\n"
@@ -68,41 +78,9 @@ def run(cmd: list[str], cwd: Optional[Path] = None, check: bool = True) -> subpr
         ) from e
 
 
-def which_or_die(exe: str) -> None:
-    from shutil import which
-
-    if which(exe) is None:
-        raise DeployError(f"Missing required command on PATH: {exe}")
-
-
-@dataclass(frozen=True)
-class BuildPaths:
-    build_dir_raw: str
-    pages_repo_dir: Path
-    content_subpath: Path
-
-
 def git_output(args: list[str], cwd: Optional[Path] = None) -> str:
-    cp = run(["git", *args], cwd=cwd)
-    return cp.stdout.strip()
+    return run(["git", *args], cwd=cwd).stdout.strip()
 
-
-def git_try(args: list[str], cwd: Optional[Path] = None) -> bool:
-    try:
-        run(["git", *args], cwd=cwd, check=True)
-        return True
-    except DeployError:
-        return False
-
-def copy_main_gitignore(main_repo: Path, pages_repo: Path) -> None:
-    src = main_repo / ".gitignore"
-    dst = pages_repo / ".gitignore"
-
-    if not src.exists():
-        return  # nothing to copy
-
-    # Always overwrite to keep them in sync
-    dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
 def enforce_repo_root(cwd: Path) -> None:
     top = git_output(["rev-parse", "--show-toplevel"], cwd=cwd)
@@ -152,179 +130,125 @@ def parse_mdbook_build_dir(book_toml_path: Path) -> str:
     return build_dir
 
 
-def enforce_seatbelt(build_dir: str) -> None:
+@dataclass(frozen=True)
+class BuildPaths:
+    build_dir_raw: str
+    deploy_root: Path  # absolute path to build output (e.g. <repo>/gh-pages/docs)
+
+
+def compute_deploy_root(repo_root: Path, build_dir: str) -> BuildPaths:
     norm = build_dir.replace("\\", "/").strip().strip("/")
-    if norm == BRANCH or norm.startswith(f"{BRANCH}/"):
-        return
-    raise DeployError(
-        f"Refusing to deploy: build-dir is '{build_dir}', which is not '{BRANCH}' or under '{BRANCH}/'.\n"
-        f"Fix book.toml [build].build-dir to '{BRANCH}/docs' (recommended) or '{BRANCH}'."
-    )
-
-
-def compute_paths(build_dir: str) -> BuildPaths:
-    norm = build_dir.replace("\\", "/").strip().strip("/")
-    parts = [p for p in norm.split("/") if p]
-    if not parts:
-        raise DeployError(f"Unexpected build-dir value: {build_dir!r}")
-    pages_repo = Path(parts[0])
-    content = Path(".") if len(parts) == 1 else Path(*parts[1:])
-    return BuildPaths(build_dir_raw=build_dir, pages_repo_dir=pages_repo, content_subpath=content)
-
-
-def guard_pages_dir_not_tracked_and_warn_if_not_ignored(cwd: Path, pages_dir: Path) -> None:
-    # Refuse if tracked
-    tracked = git_output(["ls-files", "--", str(pages_dir)], cwd=cwd)
-    if tracked.strip():
-        sample = "\n".join(tracked.splitlines()[:10])
+    # Enforce gh-pages/docs as safest contract (matches your GitHub Pages settings: branch gh-pages, folder /docs)
+    if norm != "gh-pages/docs":
         raise DeployError(
-            f"Refusing to deploy: '{pages_dir}' is tracked by the main repo.\n"
-            "This will cause nested-repo headaches.\n"
-            "Tracked examples:\n"
-            f"{sample}\n"
-            f"Fix:\n"
-            f"  git rm -r --cached {pages_dir}\n"
-            f"  echo {pages_dir}/ >> .gitignore\n"
-            f"  git add .gitignore && git commit -m \"Ignore {pages_dir}/\"\n"
+            f"Refusing to deploy: build-dir is '{build_dir}', expected exactly 'gh-pages/docs'.\n"
+            "Reason: simplest, safest publish contract (branch=gh-pages, folder=/docs)."
         )
-
-    # Warn if not ignored (non-fatal)
-    ignored = git_try(["check-ignore", "-q", str(pages_dir)], cwd=cwd)
-    if not ignored:
-        print(
-            f"WARNING: '{pages_dir}' is not ignored by the main repo.\n"
-            "It’s easy to accidentally stage generated site output on your main branch.\n"
-            f"Recommended: add '{pages_dir}/' to .gitignore.\n",
-            file=sys.stderr,
-        )
+    deploy_root = (repo_root / "gh-pages" / "docs").resolve()
+    return BuildPaths(build_dir_raw=build_dir, deploy_root=deploy_root)
 
 
-def ensure_pages_repo(pages_repo: Path, origin_url: str) -> None:
-    pages_repo.mkdir(parents=True, exist_ok=True)
-
-    if not (pages_repo / ".git").exists():
-        run(["git", "init"], cwd=pages_repo)
-
-    copy_main_gitignore(Path.cwd(), pages_repo)
-    run(["git", "add", ".gitignore"], cwd=pages_repo)
-
-    existing_origin: Optional[str]
-    try:
-        existing_origin = git_output(["remote", "get-url", "origin"], cwd=pages_repo)
-    except DeployError:
-        existing_origin = None
-
-    if not existing_origin:
-        run(["git", "remote", "add", "origin", origin_url], cwd=pages_repo)
-    elif existing_origin != origin_url:
-        run(["git", "remote", "set-url", "origin", origin_url], cwd=pages_repo)
-
-    try:
-        run(["git", "fetch", "origin", "--prune"], cwd=pages_repo)
-    except DeployError:
-        pass
+def purge_worktree_contents(worktree: Path) -> None:
+    # Remove everything except .git
+    for entry in worktree.iterdir():
+        if entry.name == ".git":
+            continue
+        if entry.is_dir():
+            shutil.rmtree(entry, ignore_errors=True)
+        else:
+            try:
+                entry.unlink()
+            except FileNotFoundError:
+                pass
 
 
-def ensure_branch_checked_out(pages_repo: Path) -> None:
-    local_has = git_try(["show-ref", "--verify", "--quiet", f"refs/heads/{BRANCH}"], cwd=pages_repo)
-    remote_has = git_try(["show-ref", "--verify", "--quiet", f"refs/remotes/origin/{BRANCH}"], cwd=pages_repo)
-
-    if local_has:
-        run(["git", "checkout", BRANCH], cwd=pages_repo)
-    elif remote_has:
-        run(["git", "checkout", "-b", BRANCH, "--track", f"origin/{BRANCH}"], cwd=pages_repo)
-    else:
-        run(["git", "checkout", "--orphan", BRANCH], cwd=pages_repo)
-
-        for entry in pages_repo.iterdir():
-            if entry.name == ".git":
-                continue
-            if entry.is_dir():
-                for root, dirs, files in os.walk(entry, topdown=False):
-                    for f in files:
-                        Path(root, f).unlink(missing_ok=True)
-                    for d in dirs:
-                        Path(root, d).rmdir()
-                entry.rmdir()
-            else:
-                entry.unlink(missing_ok=True)
-
-        (pages_repo / "README.txt").write_text("GitHub Pages branch\n", encoding="utf-8")
-        run(["git", "add", "-A"], cwd=pages_repo)
-        run(["git", "commit", "-m", "Initialize gh-pages"], cwd=pages_repo)
-
-    if remote_has:
-        try:
-            run(["git", "pull", "--rebase", "origin", BRANCH], cwd=pages_repo)
-        except DeployError:
-            pass
-
-
-def stage_commit_push(pages_repo: Path, content_subpath: Path, build_dir_raw: str) -> None:
-    content_abs = pages_repo if content_subpath == Path(".") else pages_repo / content_subpath
-    if not content_abs.exists():
-        raise DeployError(
-            f"Expected content folder '{content_abs}' not found.\n"
-            f"mdBook build-dir is '{build_dir_raw}'."
-        )
-
-    run(["git", "add", "-A", "--", str(content_subpath)], cwd=pages_repo)
-
-    status = git_output(["status", "--porcelain"], cwd=pages_repo)
-    if not status.strip():
-        print(f"No changes to deploy (content: {build_dir_raw}).")
-        return
-
-    from datetime import datetime
-
-    stamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    run(["git", "commit", "-m", f"deploy: {stamp}"], cwd=pages_repo)
-    run(["git", "push", "origin", BRANCH], cwd=pages_repo)
-    print(f"Deployed '{build_dir_raw}' on branch '{BRANCH}'.")
-
-
-def _chunked(seq: list[str], n: int) -> Iterable[list[str]]:
-    for i in range(0, len(seq), n):
-        yield seq[i:i+n]
-
-def stage_from_audit(
-    pages_repo: Path,
-    content_subpath: Path,
-    project_root: Path,
-    dry_run: bool = False,
-) -> list[str]:
+def copy_audited_files(
+    deploy_root: Path,
+    audited_relpaths: list[str],
+    worktree: Path,
+) -> None:
     """
-    Uses deploy.toml policy to decide what to stage.
-    Returns the audited file list (relative to deploy_root).
+    Copies files from deploy_root/<relpath> into worktree/docs/<relpath>
     """
-    deploy_root = pages_repo if content_subpath == Path(".") else (pages_repo / content_subpath)
+    docs_root = worktree / "docs"
+    docs_root.mkdir(parents=True, exist_ok=True)
 
-    # audited files are relative to deploy_root
-    rel_files = audit(project_root=project_root, deploy_root=deploy_root)
+    for rel in audited_relpaths:
+        rel_norm = rel.replace("\\", "/").lstrip("/")
+        src = deploy_root / rel_norm
+        if not src.is_file():
+            # If audit returned a non-existent file, that's a policy mismatch; fail fast.
+            raise DeployError(f"Audit listed file that does not exist: {src}")
+        dst = docs_root / rel_norm
+        dst.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copy2(src, dst)
 
-    # Stage deletions/updates for already tracked files within subtree
-    subtree = "." if content_subpath == Path(".") else content_subpath.as_posix()
 
+def make_worktree(repo_root: Path) -> Path:
+    """
+    Creates a temporary worktree for BRANCH.
+    Returns the worktree path.
+    """
+    tmpdir = Path(tempfile.mkdtemp(prefix="ghpages_worktree_")).resolve()
+    # Create/update local branch ref for worktree usage; doesn't matter what it points to (we will orphan reset).
+    run(["git", "worktree", "add", "-B", BRANCH, str(tmpdir)], cwd=repo_root)
+    return tmpdir
+
+
+def remove_worktree(repo_root: Path, worktree: Path) -> None:
+    try:
+        run(["git", "worktree", "remove", "-f", str(worktree)], cwd=repo_root, check=False)
+    finally:
+        shutil.rmtree(worktree, ignore_errors=True)
+
+
+def deploy_disposable(
+    repo_root: Path,
+    deploy_root: Path,
+    audited_relpaths: list[str],
+    dry_run: bool,
+) -> None:
     if dry_run:
         print(f"DRY RUN: deploy_root={deploy_root}")
-        print(f"DRY RUN: subtree_for_updates={subtree}")
-        print(f"DRY RUN: audited_files={len(rel_files)}")
-        for f in rel_files:
-            print(f)
-        return rel_files
+        print(f"DRY RUN: audited_files={len(audited_relpaths)}")
+        for p in audited_relpaths:
+            print(p)
+        return
 
-    # 1) updates/deletions only (safe)
-    run(["git", "add", "-u", "--", subtree], cwd=pages_repo)
+    origin_url = git_output(["remote", "get-url", "origin"], cwd=repo_root)
+    if not origin_url:
+        raise DeployError("Could not determine 'origin' remote URL from the main repo.")
 
-    # 2) explicit allowlist adds/updates (safe)
-    # Convert audited paths to paths relative to pages_repo for git pathspec
-    prefix = "" if content_subpath == Path(".") else content_subpath.as_posix().rstrip("/") + "/"
-    pathspecs = [prefix + f for f in rel_files]
+    worktree = make_worktree(repo_root)
+    try:
+        # Ensure we are on the gh-pages branch
+        run(["git", "checkout", BRANCH], cwd=worktree)
 
-    for chunk in _chunked(pathspecs, 400):
-        run(["git", "add", "--", *chunk], cwd=pages_repo)
+        # Remove everything from index and working tree except .git
+        run(["git", "rm", "-rf", "."], cwd=worktree)
+        purge_worktree_contents(worktree)
 
-    return rel_files
+        # Copy only audited files into docs/
+        copy_audited_files(deploy_root=deploy_root, audited_relpaths=audited_relpaths, worktree=worktree)
+
+        # Ensure .nojekyll exists (even if policy forgot it)
+        (worktree / "docs" / ".nojekyll").touch()
+
+        # Stage and commit
+        run(["git", "add", "-A"], cwd=worktree)
+        status = git_output(["status", "--porcelain"], cwd=worktree)
+        if not status.strip():
+            print("No changes to deploy.")
+            return
+
+        run(["git", "commit", "-m", "deploy"], cwd=worktree)
+
+        # Force push (artifact channel)
+        run(["git", "push", "-f", "origin", BRANCH], cwd=worktree)
+        print(f"Deployed '{deploy_root}' to branch '{BRANCH}' (single-commit artifact).")
+
+    finally:
+        remove_worktree(repo_root, worktree)
 
 
 def main() -> int:
@@ -332,33 +256,36 @@ def main() -> int:
         which_or_die("git")
         which_or_die("mdbook")
 
-        cwd = Path.cwd()
-        enforce_repo_root(cwd)
+        parser = argparse.ArgumentParser()
+        parser.add_argument("--dry-run", action="store_true", help="Audit and print staged file list; do not push.")
+        args = parser.parse_args()
 
-        book_toml_path = cwd / BOOK_TOML
-        if not book_toml_path.is_file():
-            raise DeployError("book.toml not found in current directory. Aborting.")
+        repo_root = Path.cwd()
+        enforce_repo_root(repo_root)
 
-        build_dir = parse_mdbook_build_dir(book_toml_path)
-        enforce_seatbelt(build_dir)
-        paths = compute_paths(build_dir)
-
-        # Guard against nested-repo footguns
-        guard_pages_dir_not_tracked_and_warn_if_not_ignored(cwd, paths.pages_repo_dir)
-
-        origin_url = git_output(["remote", "get-url", "origin"], cwd=cwd)
-        if not origin_url:
-            raise DeployError("Could not determine 'origin' remote URL from the main repo.")
+        book_toml = repo_root / BOOK_TOML
+        build_dir = parse_mdbook_build_dir(book_toml)
+        paths = compute_deploy_root(repo_root, build_dir)
 
         # Build
-        run(["mdbook", "build"], cwd=cwd)
+        run(["mdbook", "build"], cwd=repo_root)
 
-        # Setup pages repo + branch
-        ensure_pages_repo(paths.pages_repo_dir, origin_url)
-        ensure_branch_checked_out(paths.pages_repo_dir)
+        if not paths.deploy_root.exists():
+            raise DeployError(f"Build output not found: {paths.deploy_root}")
 
-        # Deploy only the content subtree (e.g. docs/)
-        stage_commit_push(paths.pages_repo_dir, paths.content_subpath, paths.build_dir_raw)
+        # Audit
+        try:
+            audited = audit(project_root=repo_root, deploy_root=paths.deploy_root)
+        except DeployTomlNotFoundError as e:
+            raise DeployError(str(e)) from e
+
+        # Deploy
+        deploy_disposable(
+            repo_root=repo_root,
+            deploy_root=paths.deploy_root,
+            audited_relpaths=audited,
+            dry_run=args.dry_run,
+        )
 
         return 0
 
