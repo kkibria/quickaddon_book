@@ -34,8 +34,8 @@ import subprocess
 import sys
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Optional
-
+from typing import Iterable, Optional
+from .audit_deploy import audit, DeployTomlNotFoundError
 
 BRANCH = "gh-pages"
 BOOK_TOML = "book.toml"
@@ -47,6 +47,7 @@ class DeployError(RuntimeError):
 
 def run(cmd: list[str], cwd: Optional[Path] = None, check: bool = True) -> subprocess.CompletedProcess[str]:
     pretty = " ".join(shlex.quote(c) for c in cmd)
+    print(f"running {pretty}")
     try:
         cp = subprocess.run(
             cmd,
@@ -280,6 +281,50 @@ def stage_commit_push(pages_repo: Path, content_subpath: Path, build_dir_raw: st
     run(["git", "commit", "-m", f"deploy: {stamp}"], cwd=pages_repo)
     run(["git", "push", "origin", BRANCH], cwd=pages_repo)
     print(f"Deployed '{build_dir_raw}' on branch '{BRANCH}'.")
+
+
+def _chunked(seq: list[str], n: int) -> Iterable[list[str]]:
+    for i in range(0, len(seq), n):
+        yield seq[i:i+n]
+
+def stage_from_audit(
+    pages_repo: Path,
+    content_subpath: Path,
+    project_root: Path,
+    dry_run: bool = False,
+) -> list[str]:
+    """
+    Uses deploy.toml policy to decide what to stage.
+    Returns the audited file list (relative to deploy_root).
+    """
+    deploy_root = pages_repo if content_subpath == Path(".") else (pages_repo / content_subpath)
+
+    # audited files are relative to deploy_root
+    rel_files = audit(project_root=project_root, deploy_root=deploy_root)
+
+    # Stage deletions/updates for already tracked files within subtree
+    subtree = "." if content_subpath == Path(".") else content_subpath.as_posix()
+
+    if dry_run:
+        print(f"DRY RUN: deploy_root={deploy_root}")
+        print(f"DRY RUN: subtree_for_updates={subtree}")
+        print(f"DRY RUN: audited_files={len(rel_files)}")
+        for f in rel_files:
+            print(f)
+        return rel_files
+
+    # 1) updates/deletions only (safe)
+    run(["git", "add", "-u", "--", subtree], cwd=pages_repo)
+
+    # 2) explicit allowlist adds/updates (safe)
+    # Convert audited paths to paths relative to pages_repo for git pathspec
+    prefix = "" if content_subpath == Path(".") else content_subpath.as_posix().rstrip("/") + "/"
+    pathspecs = [prefix + f for f in rel_files]
+
+    for chunk in _chunked(pathspecs, 400):
+        run(["git", "add", "--", *chunk], cwd=pages_repo)
+
+    return rel_files
 
 
 def main() -> int:

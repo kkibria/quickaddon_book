@@ -19,6 +19,7 @@ fixfm = "quickaddon_book:main"
 scan = "quickaddon_book.scan:main"
 hydrate = "quickaddon_book.hydrate:main"
 deploy = "quickaddon_book.deploy:main"
+audit_deploy = "quickaddon_book.audit_deploy:main"
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
