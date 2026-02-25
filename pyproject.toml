@@ -1,5 +1,5 @@
 [project]
-name = "quickaadon_book"
+name = "quickaddon_book"
 version = "0.1.0"
 description = ""
 readme = "README.md"
@@ -15,10 +15,10 @@ dependencies = [
 ]
 
 [project.scripts]
-fixfm = "quickaadon_book:main"
-scan = "quickaadon_book.scan:main"
-hydrate = "quickaadon_book.hydrate:main"
-deploy = "quickaadon_book.deploy:main"
+fixfm = "quickaddon_book:main"
+scan = "quickaddon_book.scan:main"
+hydrate = "quickaddon_book.hydrate:main"
+deploy = "quickaddon_book.deploy:main"
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
