@@ -1,0 +1,25 @@
+strip = 1
+
+docs="""
+1. Introduction — The Copy-Paste Reward
+2. The Mental Model — Why Addons Rot
+3. First Plugin — Declarative, Not Imperative
+4. Standalone Host — How Execution Is Owned
+# advanced
+5. Embedding Plugins — Composition Without Coupling
+6. Shared Keys — Stable Contracts
+7. HostAPI v1 — Deterministic Routing
+8. Property Ownership — Who Really Owns Data
+9. Why V1 Exists — Choosing the Right Track
+10. HostAPI v2 — Scoped Composition
+11. Multi-Plugin Systems — Nested Hosts
+12. Storage Model — IDProperties and KEYMAP
+13. Long Task Contract — Strict by Design
+14. Scheduler Preview — Host-Controlled Execution
+15. Diagnostics — QA10 and QA20
+16. Refactoring an Existing Addon into a Plugin
+17. Refactoring an Existing Addon into a Host
+18. Migration Strategy — Regenerate, Don't Patch
+19. Why QuickAddon Is Strict
+20. Architectural Guarantees
+"""

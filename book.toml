@@ -1,0 +1,19 @@
+[book]
+authors = ["Khan Kibria"]
+language = "en"
+# multilingual = false
+src = "booksrc"
+title = "QuickAddon: The Blender Add-on Maker"
+
+[build]
+build-dir = "gh-pages/docs"
+
+# mdbook-frntmtr can be installed from github with,
+# cargo install --git https://github.com/kkibria/mdbook-frntmtr.git
+[preprocessor.frntmtr]
+command = "mdbook-frntmtr"
+template = "fm.template"
+
+#[preprocessor.svgdx]
+# local copy 
+# command = "cargo run --manifest-path D:/mdbook-svgdx/Cargo.toml --quiet"

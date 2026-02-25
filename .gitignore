@@ -1,0 +1,12 @@
+# pre injected: 
+.venv/
+dist/
+.vscode
+__pycache__
+gh-pages
+target/
+booksrc/doclist.md
+.DS_Store
+booksrc/notes/
+booksrc/topics_draft/               
+sarah.md

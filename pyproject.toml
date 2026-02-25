@@ -1,0 +1,25 @@
+[project]
+name = "quickaadon_book"
+version = "0.1.0"
+description = ""
+readme = "README.md"
+authors = [
+    { name = "Khan Kibria", email = "khan.kibria@gmail.com" }
+]
+
+requires-python = ">=3.11"
+dependencies = [
+    "jinja2>=3.1.6",
+    "python-frontmatter>=1.1.0",
+    "regex>=2024.11.6",
+]
+
+[project.scripts]
+fixfm = "quickaadon_book:main"
+scan = "quickaadon_book.scan:main"
+hydrate = "quickaadon_book.hydrate:main"
+deploy = "quickaadon_book.deploy:main"
+
+[build-system]
+requires = ["uv_build>=0.9.15,<0.10.0"]
+build-backend = "uv_build"
