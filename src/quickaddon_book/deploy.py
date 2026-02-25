@@ -93,6 +93,15 @@ def git_try(args: list[str], cwd: Optional[Path] = None) -> bool:
     except DeployError:
         return False
 
+def copy_main_gitignore(main_repo: Path, pages_repo: Path) -> None:
+    src = main_repo / ".gitignore"
+    dst = pages_repo / ".gitignore"
+
+    if not src.exists():
+        return  # nothing to copy
+
+    # Always overwrite to keep them in sync
+    dst.write_text(src.read_text(encoding="utf-8"), encoding="utf-8")
 
 def enforce_repo_root(cwd: Path) -> None:
     top = git_output(["rev-parse", "--show-toplevel"], cwd=cwd)
@@ -194,6 +203,9 @@ def ensure_pages_repo(pages_repo: Path, origin_url: str) -> None:
 
     if not (pages_repo / ".git").exists():
         run(["git", "init"], cwd=pages_repo)
+
+    copy_main_gitignore(Path.cwd(), pages_repo)
+    run(["git", "add", ".gitignore"], cwd=pages_repo)
 
     existing_origin: Optional[str]
     try:
