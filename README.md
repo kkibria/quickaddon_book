@@ -68,12 +68,12 @@ deploy
 ```
 
 ## Fix frontmatter
-bash```
+```bash
 fixfm
 ```
 
 ## Fix Summary
-bash```
+```bash
 fixsum
 ```
 
@@ -83,6 +83,6 @@ This command will crate all the empty chapters with titles provided.
 Then you can go and type content in these chapters.
 
 For this example,
-bash```
+```bash
 hydrate revision1.toml
 ```
