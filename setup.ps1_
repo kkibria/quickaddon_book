@@ -1,9 +1,0 @@
-$url = git remote get-url origin
-mkdir gh-pages
-Set-Location gh-pages
-git init
-git remote add origin $url
-
-git checkout -b gh-pages
-git pull origin gh-pages
-Set-Location ..

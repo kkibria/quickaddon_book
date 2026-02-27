@@ -1,7 +1,6 @@
 [book]
 authors = ["Khan Kibria"]
 language = "en"
-# multilingual = false
 src = "booksrc"
 title = "QuickAddon: The Blender Add-on Maker (Draft)"
 

@@ -6,131 +6,174 @@ title: Mental Model
 
 # {{ page.title }}
 
+QuickAddon exists for two kinds of developers:
 
-QuickAddon serves two audiences:
+* Those who want to build Blender tools without writing boilerplate.
+* Those whose existing add-ons are growing and need structural separation.
 
-* People who want to build Blender tools without learning the full add-on internals.
-* Developers whose existing add-ons are growing and need clearer structural separation.
+This chapter explains the system in one pass.
 
-You can read this book sequentially.
-If you already write add-ons, you may skip strategically (see below).
-
----
-
-## Reading Guide
-
-### If you are new to Blender add-ons
-
-Continue to **Chapter 3**.
-You will build a working tool immediately and see the workflow in action.
-
-### If you already write add-ons
-
-You may skim:
-
-* Chapter 3 (basic tool generation)
-* Chapter 4 (standalone behavior)
-
-Then jump to:
-
-* Chapter 5 – Embedding Plugins
-* Chapter 8 – Property Ownership
-* Chapter 11 – Refactoring an Add-on into a Host
-* Chapter 12 – Refactoring an Add-on into a Plugin
-
-Those chapters focus on structure, migration, and scaling.
+If it feels abstract at first, that is intentional.
+Each concept becomes concrete in later chapters.
 
 ---
 
-## Core Model (Concise Version)
+## The Problem It Solves
+
+Traditional Blender add-ons tend to mix:
+
+- Tool logic
+- UI layout
+- Property definitions
+- Registration plumbing
+- Storage routing
+
+in the same file.
+
+As an add-on grows, this coupling becomes difficult to reason about.
+
+QuickAddon enforces separation between these concerns.
+
+That separation is the foundation of scalability.
+
+---
+
+## Core Separation
 
 QuickAddon separates three concerns:
 
-1. Tool logic
-2. Shared values
-3. Storage ownership
+1. **Tool Logic**
+2. **Shared Values**
+3. **Storage Ownership**
 
-Keeping these separate is the key to how the system scales.
+Understanding these three layers is enough to understand the entire system.
 
 ---
 
-### Tool Logic
+## Tool Logic
 
 You write decorated Python functions.
 
 The generator produces:
 
-* Operators
-* Panels
-* Properties
-* Registration code
+- Operators
+- Panels
+- Property definitions
+- Registration code
 
-You do not manually define Blender classes or registration blocks.
-Your file contains behavior; the generated code contains structure.
+Your source file contains behavior.
+The generated code contains structure.
+
+You do not manually define Blender classes.
+You do not write `register()` blocks.
+You do not manually route properties.
+
+Runtime context (such as `context`, `scene`, etc.) is supplied explicitly through the Injection Contract.
 
 ---
 
-### Shared Values
+## Shared Values
 
 Shared parameters are declared in the decorator:
 
 ```python
 shared={"audio_path": "project.audio_path"}
-```
+````
 
 A shared key:
 
 * Is a stable string identifier
-* Is **not** a Blender property path
-* Is treated as an opaque routing key
+* Is not a Blender property path
+* Is an opaque routing key
 
 Multiple tools may reference the same shared key.
 
-The key itself does not define where data lives.
-It only defines a contract.
+The key does not define where data lives.
+It defines a contract.
 
 ---
 
-### Storage Ownership
+## Storage Ownership
 
-By default:
+A **host** is any add-on that provides storage routing and panel integration for one or more plugins.
 
-* Shared values are stored in `Scene.qa_shared`.
-* The generated add-on manages this automatically.
+In standalone mode, the generated add-on acts as its own host.
 
-When a tool is embedded into a host:
+In embedded mode, another add-on becomes the host.
 
-* The host may route shared keys into its own storage.
-* The tool code does not change.
+Hosts control:
 
-This routing is handled through the HostAPI contract.
+* Where shared values are stored
+* How shared UI is drawn
+* How plugin instances are scoped
 
-The plugin declares what it needs.
-The host decides where it is stored.
+Plugins declare intent.
+Hosts enforce routing.
 
 ---
 
-## Design Constraints (v1)
+## Scoped Instances (v2)
 
-QuickAddon v1 intentionally enforces:
+In HostAPI v2, every plugin instance is bound to a **scope**.
+
+Shared values are resolved as:
+
+```
+(scope, key)
+```
+
+Scopes allow:
+
+* Multiple instances of the same plugin
+* Isolation between instances
+* Nested composition (host-of-host)
+
+Scope identity is opaque and host-defined.
+
+Plugins remain unaware of scope structure.
+
+---
+
+## Structural Overview
+
+```
+Plugin Function
+        ↓
+Generated Operator
+        ↓
+HostAPI (Scoped Routing)
+        ↓
+Host Storage
+```
+
+Each layer has one responsibility.
+
+No layer reaches into another layer's storage directly.
+
+---
+
+## Design Constraints
+
+QuickAddon v2 enforces:
 
 * Deterministic host injection
-* Single active mapping per plugin module
-* Read-only shared access by default
-* Explicit write channels only if implemented by the host
+* Explicit scoping
+* Centralized shared routing
+* Stateless plugin behavior
+* No implicit global state
 
 These constraints favor predictability over flexibility.
 
-They are not limitations.
-They are guardrails.
+In large add-on systems, predictability scales better than cleverness.
 
 ---
 
-That is the entire mental model.
+## Summary
 
 You write Python functions.
-QuickAddon generates structure.
-Hosts control storage routing.
 
-If the terms above feel abstract, that’s fine.
-Each concept will be unpacked in context in the following chapters.
+QuickAddon generates structure.
+
+Hosts control storage and lifecycle.
+
+That is the entire model.

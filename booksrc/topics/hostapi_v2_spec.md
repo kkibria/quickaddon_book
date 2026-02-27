@@ -6,7 +6,6 @@ title: QuickAddon HostAPI v2 Spec
 
 # {{ page.title }}
 
-
 HostAPI v2 introduces **scoped instances** and enables:
 
 * Multi-instance plugins
@@ -34,8 +33,19 @@ Shared keys are no longer resolved globally.
 They are resolved as:
 
 ```
+
 (scope, key)
+
 ```
+
+Scope identity is:
+
+* Host-defined
+* Opaque to plugins
+* Stable across file save/load
+* Unique within a scene
+
+Plugins must not assume scope format.
 
 ---
 
@@ -43,11 +53,19 @@ They are resolved as:
 
 HostAPI v2 introduces `bind()`.
 
-`bind()` allocates a scope and returns a HostAPI instance bound to that scope.
+`bind()` allocates (or selects) a scope and returns a HostAPI instance bound to that scope.
 
 After binding, all `get()` and `draw()` calls operate within that scope.
 
-Scope identity is host-defined and opaque to plugins.
+Scope allocation may be:
+
+* **Eager** (during bind)
+* **Lazy** (during first get/draw call)
+
+Blender registration does not always provide reliable context,  
+so hosts may defer scope materialization until runtime.
+
+Scope identity remains host-defined and opaque.
 
 ---
 
@@ -58,8 +76,8 @@ class HostAPI:
 
     def bind(
         self,
-        context,
-        plugin_id: str,
+        context=None,
+        plugin_id: str = ...,
         instance_hint: str | None = None,
     ) -> "HostAPI":
         """
@@ -68,6 +86,7 @@ class HostAPI:
         - `plugin_id` identifies the registering plugin module.
         - `instance_hint` may be used to request deterministic naming
           (e.g., "encode_A").
+        - `context` may be None; hosts may allocate lazily.
         - Returns a HostAPI bound to that scope.
         """
         ...
@@ -107,8 +126,7 @@ These methods define the routing contract for v2.
 ## Scope Allocation Rules
 
 * Each call to `bind()` allocates or selects one scope.
-* Scopes must be unique within a scene.
-* Scope identifiers are opaque and host-defined.
+* Scope identifiers must be unique within a scene.
 * Scope lifetime is tied to scene data.
 * Scope identity must remain stable across file save/load.
 
@@ -117,7 +135,7 @@ Hosts may choose:
 * Deterministic scope naming (recommended when `instance_hint` is provided)
 * Opaque auto-generated identifiers
 
-Plugins must not assume scope format.
+Plugins must treat scope identity as opaque.
 
 ---
 
@@ -146,12 +164,21 @@ Hosts may route specific `(scope, key)` pairs to typed `PropertyGroup`s via KEYM
 
 KEYMAP must become scope-aware.
 
-Recommended structure:
+Hosts may implement either:
+
+### Global Routing
 
 ```python
-KEYMAP = {
+KEYMAP_GLOBAL = {
+    "project.audio_path": ("audiodeck_props", "audio_path"),
+}
+```
+
+### Scoped Override
+
+```python
+KEYMAP_SCOPED = {
     "<scope_id>": {
-        "project.audio_path": ("audiodeck_props", "audio_path"),
         "project.bpm": ("audiodeck_props", "bpm"),
     }
 }
@@ -159,8 +186,9 @@ KEYMAP = {
 
 Resolution order for `get()`:
 
-1. If `(scope, key)` exists in KEYMAP → return host-owned value
-2. Else → return scoped fallback storage
+1. Scoped override `(scope_id, key)`
+2. Global routing `key`
+3. Scoped fallback storage
 
 Isolation is enforced by design.
 
@@ -174,7 +202,7 @@ Example:
 
 * Host A embeds Host B.
 * Host A calls `bind()` to allocate a scope for B.
-* Host A passes the bound HostAPI to B during registration.
+* Host A passes the **bound HostAPI** to B during registration.
 * B allocates child scopes using its bound API.
 
 Scopes may be hierarchical internally,
@@ -202,9 +230,9 @@ Hosts enforce isolation.
 
 Hosts in v2:
 
-* Allocate scopes during registration
+* Allocate scopes during registration or lazily at runtime
 * Own scoped storage lifecycle
-* Maintain scope-aware KEYMAP
+* Maintain scope-aware routing
 * Enforce isolation between instances
 * Optionally expose instance management UI
 
@@ -222,6 +250,22 @@ Shared keys are isolated per scope unless
 explicitly routed by the host.
 
 Isolation is the default.
+
+---
+
+## Plugin Identity
+
+`plugin_id` must be:
+
+* Stable across reloads
+* Unique per plugin module
+
+Recommended source:
+
+* Module name
+* Add-on package name
+
+Hosts use `plugin_id` as part of deterministic scope allocation.
 
 ---
 

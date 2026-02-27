@@ -1,5 +1,6 @@
 from pathlib import Path
 import tomllib
+from toolslib.safe_write import safe_open_write
 
 text1="""
 1. Introduction — The Copy-Paste Reward
@@ -30,9 +31,9 @@ def safe_name(name) -> str:
 def make_files(destpath, text, stripcnt):
     doc = Path(destpath)
     doc.mkdir(parents=True, exist_ok=True)
-    sumpath = doc.parent / f"SUMMARY_{doc.stem}.md"
+    sumpath = doc.parent / f"SUMMARY.md"
 
-    with open(sumpath, "w") as sf:    
+    with safe_open_write(sumpath) as sf:    
         for i, line in enumerate(text.splitlines()):
             line = line.strip()
             if not line:

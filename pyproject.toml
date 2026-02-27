@@ -12,15 +12,18 @@ dependencies = [
     "jinja2>=3.1.6",
     "python-frontmatter>=1.1.0",
     "regex>=2024.11.6",
+    "toolslib",
 ]
 
 [project.scripts]
 fixfm = "quickaddon_book:main"
-scan = "quickaddon_book.scan:main"
+fixsum = "quickaddon_book.scan:main"
 hydrate = "quickaddon_book.hydrate:main"
 deploy = "quickaddon_book.deploy:main"
-audit_deploy = "quickaddon_book.audit_deploy:main"
 
 [build-system]
 requires = ["uv_build>=0.9.15,<0.10.0"]
 build-backend = "uv_build"
+
+[tool.uv.sources]
+toolslib = { git = "https://github.com/kkibria/toolslib.git" }

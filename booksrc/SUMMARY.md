@@ -31,6 +31,7 @@ title: Index
 - [Composition Over Convenience](topics/16_conclusion.md)
 
 # References
+- [Injection Contract v1](topics/injection_contract_v1.md)
 - [QuickAddon HostAPI v2 Spec](topics/hostapi_v2_spec.md)
 - [Diagnostics and Contract Enforcement](topics/errorreporting.md)
 
