@@ -112,25 +112,11 @@ Hosts enforce routing.
 
 ---
 
-## Scoped Instances (v2)
+## Instance Isolation (Later)
 
-In HostAPI v2, every plugin instance is bound to a **scope**.
+As systems grow, hosts may need multiple independent instances of the same plugin.
 
-Shared values are resolved as:
-
-```
-(scope, key)
-```
-
-Scopes allow:
-
-* Multiple instances of the same plugin
-* Isolation between instances
-* Nested composition (host-of-host)
-
-Scope identity is opaque and host-defined.
-
-Plugins remain unaware of scope structure.
+That isolation model is introduced later in the book after the v1 routing model is established.
 
 ---
 
@@ -141,7 +127,7 @@ Plugin Function
         ↓
 Generated Operator
         ↓
-HostAPI (Scoped Routing)
+HostAPI (Routing)
         ↓
 Host Storage
 ```
@@ -154,10 +140,9 @@ No layer reaches into another layer's storage directly.
 
 ## Design Constraints
 
-QuickAddon v2 enforces:
+QuickAddon enforces:
 
 * Deterministic host injection
-* Explicit scoping
 * Centralized shared routing
 * Stateless plugin behavior
 * No implicit global state

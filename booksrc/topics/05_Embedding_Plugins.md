@@ -122,7 +122,7 @@ This means:
 * `audio_encode` registers its shared definitions.
 * `audio_encode` does **not** create its own panel.
 
-Even in the standalone case in the previous chapter, we used `mode="plugin"` — this is the default and most common mode.
+Even in the standalone case in the previous chapter, we used `mode="plugin"` - this is the default and most common mode.
 
 > The other modes exist purely for QuickAddon author's debugging convenience.
 

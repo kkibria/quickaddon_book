@@ -77,13 +77,10 @@ class HostAPI:
     def bind(
         self,
         context=None,
-        plugin_id: str = ...,
         instance_hint: str | None = None,
     ) -> "HostAPI":
         """
         Allocate (or select) a scope for this plugin instance.
-
-        - `plugin_id` identifies the registering plugin module.
         - `instance_hint` may be used to request deterministic naming
           (e.g., "encode_A").
         - `context` may be None; hosts may allocate lazily.
@@ -146,7 +143,7 @@ HostAPI v2 does not mandate a specific storage backend.
 Recommended fallback backend:
 
 ```
-scene["qa_scopes"][scope_id][fallback_prop]
+scene["qa_scope:<scope_id>:<fallback_prop>"]
 ```
 
 IDProperties are recommended for:
@@ -253,19 +250,13 @@ Isolation is the default.
 
 ---
 
-## Plugin Identity
+## Instance Identity
 
-`plugin_id` must be:
+Host-facing identity is instance-oriented.
 
-* Stable across reloads
-* Unique per plugin module
+Use `instance_hint` when you need deterministic labels or grouping in host UI.
 
-Recommended source:
-
-* Module name
-* Add-on package name
-
-Hosts use `plugin_id` as part of deterministic scope allocation.
+Plugin identity remains internal to generated artifacts and is opaque to host APIs.
 
 ---
 
