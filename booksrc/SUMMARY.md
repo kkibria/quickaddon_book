@@ -33,6 +33,8 @@ title: Index
 # References
 - [Injection Contract v1](topics/injection_contract_v1.md)
 - [QuickAddon HostAPI v2 Spec](topics/hostapi_v2_spec.md)
+- [v1 to v2 migration](topics/migration.md)
 - [Diagnostics and Contract Enforcement](topics/errorreporting.md)
+- [QA Scaffold CLI Reference](topics/qa_scaffold_cli_reference.md)
 
 
