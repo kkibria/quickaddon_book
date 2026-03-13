@@ -26,7 +26,7 @@ qa-scaffold sync [--config <path>]
 qa-scaffold init ./qa_scaffolding
 ```
 
-2. Enter scaffold project and hydrate:
+2. Enter scaffold project and sync its environment:
 
 ```bash
 cd qa_scaffolding
