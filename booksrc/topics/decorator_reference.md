@@ -110,6 +110,90 @@ If multiple ops use the same shared key, they reference the same logical shared 
 
 ---
 
+## Panel
+
+`panel` controls whether QuickAddon includes the operator in its auto-generated
+panel UI.
+
+- `panel=True`
+  - Generate and register the operator
+  - Include it in the generated panel tool list
+- `panel=False`
+  - Generate and register the operator
+  - Do not include it in the generated panel tool list
+
+This is a UI composition flag only.
+
+It does **not**:
+
+- remove the operator
+- disable the operator
+- remove parameters
+- prevent invocation from other UI or code
+
+An operator with `panel=False` still exists as a normal Blender operator and can be
+invoked by `bl_idname` from menus, custom panels, keymaps, scripts, or host add-ons.
+
+### Why This Exists
+
+Most QuickAddon examples start with the default generated panel because that is the
+lowest-friction path.
+
+But QuickAddon supports a broader set of UI patterns:
+
+- standard panel-first tools
+- menu-driven operators
+- host-composed tools drawn by another add-on
+- hidden helper operators used for workflow plumbing
+
+`panel` is what lets one generated operator model support all of those cases.
+
+### Menu Behavior
+
+`panel=False` is a good fit for menu-only operators.
+
+If the operator has local parameters:
+
+- invoking it from a menu still opens Blender's floating properties dialog
+- the user can enter values before execution
+
+If the operator has no local parameters:
+
+- it runs immediately when invoked
+
+Shared parameters are different:
+
+- shared values do not appear in the local popup dialog
+- shared values are expected to be drawn by host/shared UI instead
+
+### Interaction With `shared`
+
+`panel=False` can be used with `shared`, but only when some other UI is responsible
+for exposing those shared values.
+
+Good fit:
+
+- a host add-on panel already draws the shared inputs
+- a custom UI calls generated draw helpers
+- shared values are owned by a host integration layer
+
+Awkward fit:
+
+- the generated QuickAddon panel was the only place users could edit those shared values
+
+Practical rule:
+
+- `panel=False + shared` is useful when another UI surface owns the shared state
+- `panel=False + shared` is confusing when no other UI exists for those shared inputs
+
+### Mental Model
+
+`panel` answers one question:
+
+> Should QuickAddon auto-surface this operator in its default panel UI?
+
+---
+
 ## UI Labels
 
 Use `param_labels` to override display names:

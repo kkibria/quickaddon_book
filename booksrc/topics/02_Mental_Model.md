@@ -70,6 +70,31 @@ You do not manually route properties.
 
 Runtime context (such as `context`, `scene`, etc.) is supplied explicitly through the Injection Contract.
 
+QuickAddon can then surface those generated operators in more than one way.
+
+The default path is panel-first:
+
+- QuickAddon generates panel UI
+- QuickAddon lists the operator there
+- The tool feels like a standard add-on button
+
+But the system is intentionally broader than that.
+
+Generated operators may also be:
+
+- Drawn by a host add-on instead of the default generated panel
+- Invoked from menus
+- Bound to keymaps
+- Triggered by other add-on code as helper operators
+
+This is the purpose of the `panel` decorator flag.
+
+- `panel=True` means QuickAddon should auto-surface the operator in its generated panel UI
+- `panel=False` means generate the operator normally, but let some other UI surface own how it is exposed
+
+That distinction matters because QuickAddon is not only a panel generator. It is also
+an operator generator and composition system.
+
 ---
 
 ## Shared Values
@@ -106,6 +131,7 @@ Hosts control:
 * Where shared values are stored
 * How shared UI is drawn
 * How plugin instances are scoped
+* Which UI surfaces expose which operators
 
 Plugins declare intent.
 Hosts enforce routing.
