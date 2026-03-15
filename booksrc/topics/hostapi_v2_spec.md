@@ -6,7 +6,7 @@ title: QuickAddon HostAPI v2 Spec
 
 # {{ page.title }}
 
-HostAPI v2 introduces **scoped instances** and enables:
+HostAPI v2 introduces **scoped named instances** and enables:
 
 * Multi-instance plugins
 * Nested composition (host-of-host)
@@ -25,7 +25,7 @@ HostAPI v2 replaces the single-instance model of v1.
 
 A **scope** represents one logical instance of a plugin within a host.
 
-Each plugin registration receives a unique scope.
+Each mounted plugin instance receives a unique scope.
 
 All shared key routing happens inside that scope.
 
@@ -62,7 +62,7 @@ Scope allocation may be:
 * **Eager** (during bind)
 * **Lazy** (during first get/draw call)
 
-Blender registration does not always provide reliable context,  
+Blender registration does not always provide reliable context,
 so hosts may defer scope materialization until runtime.
 
 Scope identity remains host-defined and opaque.
@@ -118,6 +118,31 @@ class HostAPI:
 
 These methods define the routing contract for v2.
 
+`bind()` is a host/runtime mechanic.
+Generated plugin users should think in terms of explicit named instances via
+`mount_instance("name")`, not direct `bind()` calls.
+
+---
+
+## Public v2 Plugin Pattern
+
+Generated v2 plugins expose a small explicit public pattern:
+
+```python
+plugin.register(host_api=host_api)
+plugin.mount_instance("main")
+plugin.unmount_instance("main")
+plugin.unregister()
+```
+
+Rules:
+
+* `register()` prepares the hosted runtime only.
+* `register()` does **not** create a hidden default instance.
+* Every usable instance is explicit and named.
+* Internal instance keys remain opaque runtime details.
+* Hosts should not call generated draw helpers directly.
+
 ---
 
 ## Scope Allocation Rules
@@ -129,7 +154,7 @@ These methods define the routing contract for v2.
 
 Hosts may choose:
 
-* Deterministic scope naming (recommended when `instance_hint` is provided)
+* Deterministic scope naming (recommended when the mounted instance has a stable name)
 * Opaque auto-generated identifiers
 
 Plugins must treat scope identity as opaque.
@@ -198,9 +223,9 @@ HostAPI v2 enables nested systems.
 Example:
 
 * Host A embeds Host B.
-* Host A calls `bind()` to allocate a scope for B.
-* Host A passes the **bound HostAPI** to B during registration.
-* B allocates child scopes using its bound API.
+* Host A mounts a root plugin instance.
+* Host-owned storage remains the ground for that tree.
+* Parent nodes may later mount child nodes on top of the same scoped storage model.
 
 Scopes may be hierarchical internally,
 but hierarchy is an implementation detail of the host.
@@ -239,9 +264,9 @@ The host owns identity, routing, and lifecycle.
 
 ## Multi-Instance Behavior
 
-The same plugin module may be registered multiple times.
+The same plugin module may expose multiple mounted named instances.
 
-Each registration receives a distinct scope.
+Each mounted instance receives a distinct scope.
 
 Shared keys are isolated per scope unless
 explicitly routed by the host.
@@ -254,7 +279,7 @@ Isolation is the default.
 
 Host-facing identity is instance-oriented.
 
-Use `instance_hint` when you need deterministic labels or grouping in host UI.
+Use explicit instance names when you need deterministic labels or grouping in host UI.
 
 Plugin identity remains internal to generated artifacts and is opaque to host APIs.
 
@@ -280,6 +305,7 @@ The tracks do not mix.
 HostAPI v2 is based on:
 
 * Explicit scoping
+* Explicit instance mounting
 * Centralized routing
 * Host-owned execution control
 * Composability over convenience

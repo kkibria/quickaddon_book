@@ -25,13 +25,14 @@ quickaddon build my_tool.py --out "$BLENDER_ADDON" --track v2 --force
 
 4. Host integration uses scoped API:
 - register plugin in plugin mode with unbound host API
-- add explicit instances with `add_instance(instance_hint="...")`
+- mount explicit named instances with `mount_instance("...")`
 
 ## What Changes Operationally
 
 - Shared resolution becomes scoped (`scope + key`).
 - Host controls scope lifecycle and routing.
 - Multiple instances of the same plugin become first-class.
+- `register()` prepares the runtime; it does not create an instance automatically.
 
 ## What Stays Stable
 
@@ -48,4 +49,3 @@ quickaddon build my_tool.py --out "$BLENDER_ADDON" --track v2 --force
   - `QA10-FILENAME-OVERRIDE-DISALLOWED`
 - Shared key type mismatch across ops:
   - `QA10-SHARED-KEY-TYPEMISMATCH`
-

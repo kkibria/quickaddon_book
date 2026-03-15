@@ -42,11 +42,13 @@ audio_encode_ops.register(
     mode="plugin",
     host_api=AudioDeckHostAPI()
 )
+audio_encode_ops.mount_instance("encode")
 
 audio_render_ops.register(
     mode="plugin",
     host_api=AudioDeckHostAPI()
 )
+audio_render_ops.mount_instance("render")
 ```
 
 Both plugins speak in shared keys.
@@ -87,7 +89,7 @@ You wrote:
 
 * A declarative `KEYMAP`
 * A mechanical `HostAPI`
-* A predictable registration pattern
+* A predictable registration + mounting pattern
 
 There is no dynamic behavior in this routing layer.
 No heuristics.
@@ -148,6 +150,7 @@ At this stage:
 * Hosts own shared data.
 * Multiple plugins are supported.
 * Routing is centralized.
+* Plugin instances are explicit and named.
 * Generation removes boilerplate.
 
 But how does this fit into the existing add-on ecosystem?

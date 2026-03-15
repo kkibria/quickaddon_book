@@ -98,8 +98,9 @@ def register():
     # audiodeck registration (already generated)
     ...
 
-    # Register audio_encode in plugin mode
-    audio_encode_ops.register(mode="plugin")
+    # Register audio_encode in plugin mode and mount one named instance
+    audio_encode_ops.register(mode="plugin", host_api=_HOST_API)
+    audio_encode_ops.mount_instance("encode")
 ```
 
 Update `unregister()` accordingly:
@@ -114,13 +115,14 @@ def unregister():
 
 Important:
 
-We use `mode="plugin"`.
+We use `mode="plugin"` and then explicitly mount a named instance.
 
 This means:
 
 * `audio_encode` registers its operators.
-* `audio_encode` registers its shared definitions.
+* `audio_encode` prepares its hosted runtime.
 * `audio_encode` does **not** create its own panel.
+* `audio_encode` does **not** create a hidden default instance.
 
 Even in the standalone case in the previous chapter, we used `mode="plugin"` - this is the default and most common mode.
 
@@ -136,11 +138,7 @@ Inside `audiodeck`’s panel class:
 def draw(self, context):
     layout = self.layout
 
-    layout.label(text="audiodeck")
-    layout.separator()
-
-    layout.label(text="audio_encode")
-    audio_encode_ops.draw(layout, context, category="QuickAddon")
+    _HOST_API.draw_registered(layout, context)
 ```
 
 That is the entire integration layer.
@@ -179,7 +177,8 @@ Embedded `audio_encode`:
 ```text
 audiodeck __init__.py
     ├── registers audio_encode (plugin mode)
-    └── draws audio_encode UI inside its own panel
+    ├── mounts a named instance
+    └── lets HostAPI render registered plugin UI
 ```
 
 `audio_encode` still contains:
@@ -192,6 +191,7 @@ Only `audiodeck` now controls:
 
 * Panel ownership
 * UI composition
+* Instance naming
 
 ---
 
