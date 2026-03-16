@@ -68,6 +68,14 @@ def setup_from_audio(
     print("BPM:", bpm)
 ```
 
+Here, `audio_path: Path` does two important things:
+
+* QuickAddon gives Blender a file-path style UI for the field
+* your function receives a real `Path` object at runtime
+
+If you want file-path UI but still want a plain string at runtime, use a `str`
+annotation and add a subtype hint later with `param_subtypes`.
+
 You tested it manually.
 Now you want a button inside Blender that runs it.
 
@@ -176,6 +184,29 @@ Click **Run**.
 Your original function executes.
 
 That’s it.
+
+Quick note:
+
+* `Path` means your function receives a `Path`
+* `str` means your function receives a `str`
+* UI hints like file pickers are separate from runtime type intent
+
+For example, this keeps a string while still using Blender's filepath picker UI:
+
+```python
+@op(
+    label="Setup From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+    param_subtypes={"audio_path": "FILE_PATH"},
+)
+def setup_from_audio(
+    audio_path: str = "",
+    bpm: int = 120,
+):
+    print(type(audio_path), audio_path)
+    print("BPM:", bpm)
+```
 
 ---
 

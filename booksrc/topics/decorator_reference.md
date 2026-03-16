@@ -25,9 +25,10 @@ Use it when you need the current supported decorator surface in one place.
     shared={"audio_path": "project.audio_path"},
     param_labels={"audio_path": "Audio File"},
     param_order={"audio_path": 100, "bpm": 10},
+    param_subtypes={"cache_dir": "DIR_PATH"},
     inject={"ctx": "ctx"},
 )
-def setup_from_audio(audio_path: Path, bpm: int = 120, ctx: Any = None):
+def setup_from_audio(audio_path: Path, bpm: int = 120, cache_dir: str = "", ctx: Any = None):
     ...
 ```
 
@@ -48,6 +49,7 @@ def setup_from_audio(audio_path: Path, bpm: int = 120, ctx: Any = None):
 | `shared` | Declares shared key routing by parameter |
 | `param_labels` | Overrides generated UI labels |
 | `param_order` | Controls display order; higher values render first |
+| `param_subtypes` | Overrides generated Blender property subtypes |
 | `inject` | Explicit runtime injection mapping |
 
 `v1` and `v2` both use the same decorator surface.
@@ -75,6 +77,12 @@ These generate:
 * `BoolProperty`
 * `StringProperty(subtype="FILE_PATH")`
 * `EnumProperty`
+
+Runtime contract:
+
+* `pathlib.Path` parameters are passed to user code as `Path` objects
+* `str` parameters are passed to user code as plain strings
+* `param_subtypes` affects Blender UI only, not runtime conversion
 
 Not supported:
 
@@ -248,6 +256,31 @@ Rules:
 * Applies to both local properties and shared inputs
 
 If `param_order` is omitted, the default order value is `0`.
+
+---
+
+## `param_subtypes`
+
+Use `param_subtypes` when you want filepath-style Blender UI without changing the
+runtime Python type:
+
+```python
+@op(
+    param_subtypes={
+        "json_path": "FILE_PATH",
+        "cache_dir": "DIR_PATH",
+    }
+)
+def export_transforms(json_path: str = "", cache_dir: str = ""):
+    ...
+```
+
+Rules:
+
+* Supported values are currently `"FILE_PATH"` and `"DIR_PATH"`.
+* Valid only for `str` and `Path` parameters.
+* For `Path`, QuickAddon still passes a `Path` object at runtime.
+* For `str`, QuickAddon still passes a plain string at runtime.
 
 ---
 

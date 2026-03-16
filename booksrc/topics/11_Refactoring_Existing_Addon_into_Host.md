@@ -150,6 +150,14 @@ def render_audio(audio_path: Path):
     ...
 ```
 
+Important contract:
+
+* `audio_path: Path` means the generated wrapper passes a real `Path` object to
+  plugin code
+* if a host/plugin author wants Blender filepath UI but needs a plain string,
+  they should use `audio_path: str` plus
+  `param_subtypes={"audio_path": "FILE_PATH"}`
+
 Generate them as plugins.
 
 These plugins:
