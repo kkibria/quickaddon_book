@@ -1,0 +1,3626 @@
+<!DOCTYPE HTML>
+<html lang="en" class="light sidebar-visible" dir="ltr">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>QuickAddon: The Blender Add-on Maker (Draft)</title>
+        <meta name="robots" content="noindex">
+
+
+        <!-- Custom HTML head -->
+
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff">
+
+        <link rel="icon" href="favicon-de23e50b.svg">
+        <link rel="shortcut icon" href="favicon-8114d1fc.png">
+        <link rel="stylesheet" href="css/variables-8adf115d.css">
+        <link rel="stylesheet" href="css/general-2459343d.css">
+        <link rel="stylesheet" href="css/chrome-ae938929.css">
+        <link rel="stylesheet" href="css/print-9e4910d8.css" media="print">
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="fonts/fonts-9644e21d.css">
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" id="mdbook-highlight-css" href="highlight-493f70e1.css">
+        <link rel="stylesheet" id="mdbook-tomorrow-night-css" href="tomorrow-night-4c0ae647.css">
+        <link rel="stylesheet" id="mdbook-ayu-highlight-css" href="ayu-highlight-3fdfc3ac.css">
+
+        <!-- Custom theme stylesheets -->
+
+
+        <!-- Provide site root and default themes to javascript -->
+        <script>
+            const path_to_root = "";
+            const default_light_theme = "light";
+            const default_dark_theme = "navy";
+            window.path_to_searchindex_js = "searchindex-93722d3d.js";
+        </script>
+        <!-- Start loading toc.js asap -->
+        <script src="toc-e7ed0be6.js"></script>
+    </head>
+    <body>
+    <div id="mdbook-help-container">
+        <div id="mdbook-help-popup">
+            <h2 class="mdbook-help-title">Keyboard shortcuts</h2>
+            <div>
+                <p>Press <kbd>←</kbd> or <kbd>→</kbd> to navigate between chapters</p>
+                <p>Press <kbd>S</kbd> or <kbd>/</kbd> to search in the book</p>
+                <p>Press <kbd>?</kbd> to show this help</p>
+                <p>Press <kbd>Esc</kbd> to hide this help</p>
+            </div>
+        </div>
+    </div>
+    <div id="mdbook-body-container">
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script>
+            try {
+                let theme = localStorage.getItem('mdbook-theme');
+                let sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script>
+            const default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? default_dark_theme : default_light_theme;
+            let theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            const html = document.documentElement;
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add("js");
+        </script>
+
+        <input type="checkbox" id="mdbook-sidebar-toggle-anchor" class="hidden">
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script>
+            let sidebar = null;
+            const sidebar_toggle = document.getElementById("mdbook-sidebar-toggle-anchor");
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            } else {
+                sidebar = 'hidden';
+                sidebar_toggle.checked = false;
+            }
+            if (sidebar === 'visible') {
+                sidebar_toggle.checked = true;
+            } else {
+                html.classList.remove('sidebar-visible');
+            }
+        </script>
+
+        <nav id="mdbook-sidebar" class="sidebar" aria-label="Table of contents">
+            <!-- populated by js -->
+            <mdbook-sidebar-scrollbox class="sidebar-scrollbox"></mdbook-sidebar-scrollbox>
+            <noscript>
+                <iframe class="sidebar-iframe-outer" src="toc.html"></iframe>
+            </noscript>
+            <div id="mdbook-sidebar-resize-handle" class="sidebar-resize-handle">
+                <div class="sidebar-resize-indicator"></div>
+            </div>
+        </nav>
+
+        <div id="mdbook-page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                <div id="mdbook-menu-bar-hover-placeholder"></div>
+                <div id="mdbook-menu-bar" class="menu-bar sticky">
+                    <div class="left-buttons">
+                        <label id="mdbook-sidebar-toggle" class="icon-button" for="mdbook-sidebar-toggle-anchor" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="mdbook-sidebar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M0 96C0 78.3 14.3 64 32 64H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32C14.3 128 0 113.7 0 96zM0 256c0-17.7 14.3-32 32-32H416c17.7 0 32 14.3 32 32s-14.3 32-32 32H32c-17.7 0-32-14.3-32-32zM448 416c0 17.7-14.3 32-32 32H32c-17.7 0-32-14.3-32-32s14.3-32 32-32H416c17.7 0 32 14.3 32 32z"/></svg></span>
+                        </label>
+                        <button id="mdbook-theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="mdbook-theme-list">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M371.3 367.1c27.3-3.9 51.9-19.4 67.2-42.9L600.2 74.1c12.6-19.5 9.4-45.3-7.6-61.2S549.7-4.4 531.1 9.6L294.4 187.2c-24 18-38.2 46.1-38.4 76.1L371.3 367.1zm-19.6 25.4l-116-104.4C175.9 290.3 128 339.6 128 400c0 3.9 .2 7.8 .6 11.6c1.8 17.5-10.2 36.4-27.8 36.4H96c-17.7 0-32 14.3-32 32s14.3 32 32 32H240c61.9 0 112-50.1 112-112c0-2.5-.1-5-.2-7.5z"/></svg></span>
+                        </button>
+                        <ul id="mdbook-theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-default_theme">Auto</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-light">Light</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="mdbook-theme-ayu">Ayu</button></li>
+                        </ul>
+                        <button id="mdbook-search-toggle" class="icon-button" type="button" title="Search (`/`)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="/ s" aria-controls="mdbook-searchbar">
+                            <span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352c79.5 0 144-64.5 144-144s-64.5-144-144-144S64 128.5 64 208s64.5 144 144 144z"/></svg></span>
+                        </button>
+                    </div>
+
+                    <h1 class="menu-title">QuickAddon: The Blender Add-on Maker (Draft)</h1>
+
+                    <div class="right-buttons">
+                        <a href="print.html" title="Print this book" aria-label="Print this book">
+                            <span class=fa-svg id="print-button"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M128 0C92.7 0 64 28.7 64 64v96h64V64H354.7L384 93.3V160h64V93.3c0-17-6.7-33.3-18.7-45.3L400 18.7C388 6.7 371.7 0 354.7 0H128zM384 352v32 64H128V384 368 352H384zm64 32h32c17.7 0 32-14.3 32-32V256c0-35.3-28.7-64-64-64H64c-35.3 0-64 28.7-64 64v96c0 17.7 14.3 32 32 32H64v64c0 35.3 28.7 64 64 64H384c35.3 0 64-28.7 64-64V384zm-16-88c-13.3 0-24-10.7-24-24s10.7-24 24-24s24 10.7 24 24s-10.7 24-24 24z"/></svg></span>
+                        </a>
+
+                    </div>
+                </div>
+
+                <div id="mdbook-search-wrapper" class="hidden">
+                    <form id="mdbook-searchbar-outer" class="searchbar-outer">
+                        <div class="search-wrapper">
+                            <input type="search" id="mdbook-searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="mdbook-searchresults-outer" aria-describedby="searchresults-header">
+                            <div class="spinner-wrapper">
+                                <span class=fa-svg id="fa-spin"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M304 48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zm0 416c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM48 304c26.5 0 48-21.5 48-48s-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48zm464-48c0-26.5-21.5-48-48-48s-48 21.5-48 48s21.5 48 48 48s48-21.5 48-48zM142.9 437c18.7-18.7 18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zm0-294.2c18.7-18.7 18.7-49.1 0-67.9S93.7 56.2 75 75s-18.7 49.1 0 67.9s49.1 18.7 67.9 0zM369.1 437c18.7 18.7 49.1 18.7 67.9 0s18.7-49.1 0-67.9s-49.1-18.7-67.9 0s-18.7 49.1 0 67.9z"/></svg></span>
+                            </div>
+                        </div>
+                    </form>
+                    <div id="mdbook-searchresults-outer" class="searchresults-outer hidden">
+                        <div id="mdbook-searchresults-header" class="searchresults-header"></div>
+                        <ul id="mdbook-searchresults">
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script>
+                    document.getElementById('mdbook-sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('mdbook-sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#mdbook-sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="mdbook-content" class="content">
+                    <main>
+                        <h1 id="foreword--from-script-to-structure"><a class="header" href="#foreword--from-script-to-structure">Foreword — From Script to Structure</a></h1>
+<p>Most Blender add-ons don’t begin as add-ons. They begin as small Python scripts
+— little helpers written to remove friction from repetitive tasks. That was
+certainly my path. I wrote small functions, pasted them into Blender’s Script
+Editor, ran them manually, and moved on. They worked, and that was enough.</p>
+<p>Eventually, though, the thought appeared: “I wish this were just a button.”</p>
+<p>That is usually the turning point. You open the official Blender add-on
+tutorial. It starts simply, but very quickly you find yourself reading about
+<code>bpy.types.Operator</code>, registration blocks, panels, properties, and execution
+flow. It’s not wrong — it’s thorough and powerful — but it can feel like
+stepping into a formal contract with Blender’s runtime. I glanced at it more
+than once and quietly closed the tab. There’s a moment when you think, “Not
+today.”</p>
+<p>Most people do not learn add-on architecture because they are curious. They
+learn it because they hit a productivity barrier hard enough that they have no
+choice. That was my experience. And learning it was not smooth. There were small
+issues everywhere — registration mistakes, panels not appearing, properties not
+updating, reload quirks. Each issue was minor. Together they were exhausting.</p>
+<p>That experience led to a simple question: what if building a Blender add-on felt
+more like assembling Lego blocks?</p>
+<p>In Lego, you don’t begin by designing the entire structure. You start with a
+block. Then another. The connectors are predictable. Pieces snap together
+cleanly. Complexity emerges from composition, not from rewriting foundations
+every time.</p>
+<p>What if each Python function were a block? What if shared inputs were the
+connectors? What if larger systems were assembled from smaller, reusable pieces?</p>
+<p>QuickAddon was built from that frustration. Not to replace Blender’s
+architecture. Not to hide it. But to make add-on development composable — to let
+you start with a function that works and snap structure around it.</p>
+<p>This book follows that same progression. We begin with small helper functions.
+We turn them into tools. We assemble them into systems. Only later do we peel
+back the structure underneath. If you already understand Blender’s internals,
+you will recognize what is happening. If you don’t, you won’t need to — at least
+not immediately.</p>
+<p>The goal is simple: build tools like Lego. Snap them together. Let structure
+grow when you need it.</p>
+<p>And yes, we will still link the official Blender tutorial — not as a threat, but
+as a rite of passage.</p>
+<p>You will need it too as I need it everyday, as it will demystify everything. You
+will also find the reference material here.</p>
+<p><a href="https://docs.blender.org/manual/en/latest/advanced/scripting/addon_tutorial.html">The Official Blender Add-on
+Tutorial</a></p>
+<p>Allow me to introduce the <code>QuickAddon</code> next.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="introduction"><a class="header" href="#introduction">Introduction</a></h1>
+<h2 id="quickaddon"><a class="header" href="#quickaddon">QuickAddon</a></h2>
+<p>QuickAddon turns plain Python functions into fully working Blender add-ons.</p>
+<p>You write the business logic.</p>
+<p>QuickAddon generates the Blender-facing structure:</p>
+<ul>
+<li>Operators</li>
+<li>Panels</li>
+<li>Shared-property UI</li>
+<li>A standalone host wrapper</li>
+<li>An embeddable plugin module</li>
+</ul>
+<p>No boilerplate.
+No Blender ceremony.
+No manual class wiring.</p>
+<p>We’ll walk through a small example so you get the idea. In <strong>Chapter 3</strong> we will do this for real; for now, treat this as an illustration.</p>
+<hr>
+<h2 id="60-second-example"><a class="header" href="#60-second-example">60-Second Example</a></h2>
+<p>Assume you already have a proven Python function. We’ll use a tiny <code>hello.py</code>.</p>
+<p>File: <code>hello.py</code></p>
+<pre><code class="language-python">def say_hello(name: str):
+    print(f"Hello {name}")
+</code></pre>
+<p>Now run:</p>
+<pre><code class="language-bash">quickaddon doctor hello.py
+</code></pre>
+<p>You’ll see that <code>quickaddon</code> has added a small header/preamble at the top of your file.</p>
+<p>That preamble is intentional. Among other things, it makes the decorator available as <code>op</code> <strong>without you needing to import anything inside your script</strong>.</p>
+<p>Now add the decorator to your function:</p>
+<pre><code class="language-python">@op(
+    label="Say Hello",
+    space="SEQUENCE_EDITOR",
+    category="My Tools",
+    shared={
+        "name": "project.name",
+    },
+)
+def say_hello(name: str):
+    print(f"Hello {name}")
+</code></pre>
+<p>Then run:</p>
+<pre><code class="language-bash">quickaddon build hello.py --out my_addon_folder
+</code></pre>
+<p>The add-on <code>hello</code> has been created in <code>my_addon_folder</code>.</p>
+<p>Install the generated addon in Blender.</p>
+<p>Open:</p>
+<p><strong>Video Sequencer → N Panel → My Tools</strong></p>
+<p>You will see:</p>
+<ul>
+<li>A text field for <code>name</code></li>
+<li>A button labeled <strong>Say Hello</strong></li>
+</ul>
+<p>Click it.</p>
+<p>You just built a Blender add-on.</p>
+<p>No classes.
+No register/unregister boilerplate.
+No property definitions.
+No UI layout code.</p>
+<p>Just a function.</p>
+<blockquote>
+<p>If you’re tempted to try this right now, go ahead.
+But if you want the smoothest learning path, wait until <strong>Chapter 3</strong>—we’ll do this exact workflow there, step by step. For now, treat this as a preview.</p>
+</blockquote>
+<hr>
+<h2 id="what-just-happened"><a class="header" href="#what-just-happened">What Just Happened?</a></h2>
+<p>QuickAddon did three things:</p>
+<ol>
+<li>Wrapped your function in a Blender Operator.</li>
+<li>Generated shared properties for <code>project.name</code>.</li>
+<li>Created a standalone host wrapper that injects routing logic.</li>
+</ol>
+<p>You didn’t see any of it.</p>
+<p>That’s the point.</p>
+<hr>
+<h2 id="the-philosophy"><a class="header" href="#the-philosophy">The Philosophy</a></h2>
+<p>Plugins declare what they need.
+Hosts decide where data lives.
+Shared keys form contracts.</p>
+<p>QuickAddon sits in the middle and wires everything together.</p>
+<p>You get:</p>
+<ul>
+<li>Clean business logic</li>
+<li>Reusable components</li>
+<li>Embeddable tools</li>
+<li>No fragile path strings</li>
+<li>No copy-paste boilerplate across add-ons</li>
+</ul>
+<hr>
+<h2 id="what-this-means-in-practice"><a class="header" href="#what-this-means-in-practice">What This Means in Practice</a></h2>
+<p>Typical Blender add-ons accumulate:</p>
+<ul>
+<li>Boilerplate</li>
+<li><code>PropertyGroup</code> definitions</li>
+<li><code>PointerProperty</code> wiring</li>
+<li>UI layout code</li>
+<li>Register/unregister juggling</li>
+</ul>
+<p>QuickAddon removes that scaffolding from your day-to-day work.</p>
+<p>You focus on:</p>
+<pre><code class="language-python">def your_logic(...):
+    ...
+</code></pre>
+<p>…and let the generator handle the structure.</p>
+<hr>
+<h2 id="next"><a class="header" href="#next">Next</a></h2>
+<p>Now that you’ve seen the shape of it, we’ll explain the mental model.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="mental-model"><a class="header" href="#mental-model">Mental Model</a></h1>
+<p>QuickAddon exists for two kinds of developers:</p>
+<ul>
+<li>Those who want to build Blender tools without writing boilerplate.</li>
+<li>Those whose existing add-ons are growing and need structural separation.</li>
+</ul>
+<p>This chapter explains the system in one pass.</p>
+<p>If it feels abstract at first, that is intentional.
+Each concept becomes concrete in later chapters.</p>
+<hr>
+<h2 id="the-problem-it-solves"><a class="header" href="#the-problem-it-solves">The Problem It Solves</a></h2>
+<p>Traditional Blender add-ons tend to mix:</p>
+<ul>
+<li>Tool logic</li>
+<li>UI layout</li>
+<li>Property definitions</li>
+<li>Registration plumbing</li>
+<li>Storage routing</li>
+</ul>
+<p>in the same file.</p>
+<p>As an add-on grows, this coupling becomes difficult to reason about.</p>
+<p>QuickAddon enforces separation between these concerns.</p>
+<p>That separation is the foundation of scalability.</p>
+<hr>
+<h2 id="core-separation"><a class="header" href="#core-separation">Core Separation</a></h2>
+<p>QuickAddon separates three concerns:</p>
+<ol>
+<li><strong>Tool Logic</strong></li>
+<li><strong>Shared Values</strong></li>
+<li><strong>Storage Ownership</strong></li>
+</ol>
+<p>Understanding these three layers is enough to understand the entire system.</p>
+<hr>
+<h2 id="tool-logic"><a class="header" href="#tool-logic">Tool Logic</a></h2>
+<p>You write decorated Python functions.</p>
+<p>The generator produces:</p>
+<ul>
+<li>Operators</li>
+<li>Panels</li>
+<li>Property definitions</li>
+<li>Registration code</li>
+</ul>
+<p>Your source file contains behavior.
+The generated code contains structure.</p>
+<p>You do not manually define Blender classes.
+You do not write <code>register()</code> blocks.
+You do not manually route properties.</p>
+<p>Runtime context (such as <code>context</code>, <code>scene</code>, etc.) is supplied explicitly through the Injection Contract.</p>
+<p>QuickAddon can then surface those generated operators in more than one way.</p>
+<p>The default path is panel-first:</p>
+<ul>
+<li>QuickAddon generates panel UI</li>
+<li>QuickAddon lists the operator there</li>
+<li>The tool feels like a standard add-on button</li>
+</ul>
+<p>But the system is intentionally broader than that.</p>
+<p>Generated operators may also be:</p>
+<ul>
+<li>Drawn by a host add-on instead of the default generated panel</li>
+<li>Invoked from menus</li>
+<li>Bound to keymaps</li>
+<li>Triggered by other add-on code as helper operators</li>
+</ul>
+<p>This is the purpose of the <code>panel</code> decorator flag.</p>
+<ul>
+<li><code>panel=True</code> means QuickAddon should auto-surface the operator in its generated panel UI</li>
+<li><code>panel=False</code> means generate the operator normally, but let some other UI surface own how it is exposed</li>
+</ul>
+<p>That distinction matters because QuickAddon is not only a panel generator. It is also
+an operator generator and composition system.</p>
+<hr>
+<h2 id="shared-values"><a class="header" href="#shared-values">Shared Values</a></h2>
+<p>Shared parameters are declared in the decorator:</p>
+<pre><code class="language-python">shared={"audio_path": "project.audio_path"}
+</code></pre>
+<p>A shared key:</p>
+<ul>
+<li>Is a stable string identifier</li>
+<li>Is not a Blender property path</li>
+<li>Is an opaque routing key</li>
+</ul>
+<p>Multiple tools may reference the same shared key.</p>
+<p>The key does not define where data lives.
+It defines a contract.</p>
+<hr>
+<h2 id="storage-ownership"><a class="header" href="#storage-ownership">Storage Ownership</a></h2>
+<p>A <strong>host</strong> is any add-on that provides storage routing and panel integration for one or more plugins.</p>
+<p>In standalone mode, the generated add-on acts as its own host.</p>
+<p>In embedded mode, another add-on becomes the host.</p>
+<p>Hosts control:</p>
+<ul>
+<li>Where shared values are stored</li>
+<li>How shared UI is drawn</li>
+<li>How plugin instances are scoped</li>
+<li>Which UI surfaces expose which operators</li>
+</ul>
+<p>Plugins declare intent.
+Hosts enforce routing.</p>
+<hr>
+<h2 id="instance-isolation-later"><a class="header" href="#instance-isolation-later">Instance Isolation (Later)</a></h2>
+<p>As systems grow, hosts may need multiple independent instances of the same plugin.</p>
+<p>That isolation model is introduced later in the book after the v1 routing model is established.</p>
+<hr>
+<h2 id="structural-overview"><a class="header" href="#structural-overview">Structural Overview</a></h2>
+<pre><code>Plugin Function
+        ↓
+Generated Operator
+        ↓
+HostAPI (Routing)
+        ↓
+Host Storage
+</code></pre>
+<p>Each layer has one responsibility.</p>
+<p>No layer reaches into another layer’s storage directly.</p>
+<hr>
+<h2 id="design-constraints"><a class="header" href="#design-constraints">Design Constraints</a></h2>
+<p>QuickAddon enforces:</p>
+<ul>
+<li>Deterministic host injection</li>
+<li>Centralized shared routing</li>
+<li>Stateless plugin behavior</li>
+<li>No implicit global state</li>
+</ul>
+<p>These constraints favor predictability over flexibility.</p>
+<p>In large add-on systems, predictability scales better than cleverness.</p>
+<hr>
+<h2 id="summary"><a class="header" href="#summary">Summary</a></h2>
+<p>You write Python functions.</p>
+<p>QuickAddon generates structure.</p>
+<p>Hosts control storage and lifecycle.</p>
+<p>That is the entire model.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="first-plugin-1"><a href="#first-plugin-1" class="header">First Plugin</a></h1>
+<h2 id="first-plugin"><a class="header" href="#first-plugin">First Plugin</a></h2>
+<p>Since you are intending to write an add-on, it is useful to know where Blender expects add-ons to live.</p>
+<p>Open Blender.</p>
+<p>Go to the <strong>Scripting</strong> workspace and locate the <strong>Python Console</strong>.</p>
+<p>Type:</p>
+<pre><code class="language-python">&gt;&gt;&gt; import addon_utils
+&gt;&gt;&gt; addon_utils.paths()
+[
+    '/Applications/Blender-454.app/Contents/Resources/4.5/scripts/addons_core',
+    '/Users/user/Library/Application Support/Blender/4.5/scripts/addons'
+]
+</code></pre>
+<p>On my system, user-installed add-ons live in:</p>
+<pre><code>/Users/user/Library/Application Support/Blender/4.5/scripts/addons
+</code></pre>
+<p>Your path may differ depending on OS and Blender version.</p>
+<p>It is helpful to store this location in an environment variable so you don’t have to type it repeatedly.</p>
+<p>Add it to your shell configuration file (for example, <code>~/.zshrc</code> or <code>~/.bashrc</code>).
+In this book, we will assume the variable is named:</p>
+<pre><code>BLENDER_ADDON
+</code></pre>
+<p>From now on, we will use <code>$BLENDER_ADDON</code> whenever we refer to your add-on directory.</p>
+<hr>
+<h2 id="from-script-editor-to-button"><a class="header" href="#from-script-editor-to-button">From Script Editor to Button</a></h2>
+<p>Assume this is your starting point:</p>
+<p>You wrote a function.
+You pasted it into Blender’s Script Editor.
+You ran it.
+It works.</p>
+<p>Example:</p>
+<pre><code class="language-python">from pathlib import Path
+
+def setup_from_audio(
+    audio_path: Path,
+    bpm: int = 120,
+):
+    print("Audio:", audio_path)
+    print("BPM:", bpm)
+</code></pre>
+<p>Here, <code>audio_path: Path</code> does two important things:</p>
+<ul>
+<li>QuickAddon gives Blender a file-path style UI for the field</li>
+<li>your function receives a real <code>Path</code> object at runtime</li>
+</ul>
+<p>If you want file-path UI but still want a plain string at runtime, use a <code>str</code>
+annotation and add a subtype hint later with <code>param_subtypes</code>.</p>
+<p>You tested it manually.
+Now you want a button inside Blender that runs it.</p>
+<p>You do not want to learn add-on boilerplate.</p>
+<hr>
+<h3 id="step-1--save-it-to-a-file"><a class="header" href="#step-1--save-it-to-a-file">Step 1 – Save It to a File</a></h3>
+<p>Save the script as:</p>
+<pre><code>audiodeck.py
+</code></pre>
+<hr>
+<h3 id="step-2--insert-the-required-header"><a class="header" href="#step-2--insert-the-required-header">Step 2 – Insert the Required Header</a></h3>
+<p>Run:</p>
+<pre><code class="language-bash">quickaddon doctor audiodeck.py
+</code></pre>
+<p>This inserts the canonical header block.</p>
+<p>Do not edit the header.</p>
+<p>Your file now contains something like:</p>
+<pre><code class="language-python"># QUICKADDON_HEADER_BEGIN &lt;hash&gt;
+...
+# QUICKADDON_HEADER_END &lt;hash&gt;
+
+from pathlib import Path
+
+def setup_from_audio(
+    audio_path: Path,
+    bpm: int = 120,
+):
+    print("Audio:", audio_path)
+    print("BPM:", bpm)
+</code></pre>
+<p>The header enables QuickAddon to process your file correctly. It must remain intact.</p>
+<hr>
+<h3 id="step-3--add-the-op-decorator"><a class="header" href="#step-3--add-the-op-decorator">Step 3 – Add the <code>@op</code> Decorator</a></h3>
+<p>Add metadata above your function:</p>
+<pre><code class="language-python">@op(
+    label="Setup From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+)
+def setup_from_audio(
+    audio_path: Path,
+    bpm: int = 120,
+):
+    print("Audio:", audio_path)
+    print("BPM:", bpm)
+</code></pre>
+<p>That is the only structural change.</p>
+<p>You did not convert it into a class.
+You did not define a Blender Operator manually.
+You did not import <code>bpy</code>.</p>
+<hr>
+<h3 id="step-4--build-the-add-on"><a class="header" href="#step-4--build-the-add-on">Step 4 – Build the Add-on</a></h3>
+<p>Now build it into the Blender add-on directory we identified earlier:</p>
+<pre><code class="language-bash">quickaddon build audiodeck.py \
+  --out $BLENDER_ADDON \
+  --force
+</code></pre>
+<p>Open Blender.</p>
+<p>Go to <strong>Edit → Preferences → Add-ons</strong>.</p>
+<p>Search for <strong>Setup From Audio</strong> and enable it.</p>
+<p>From now on, Blender will load this add-on automatically.</p>
+<p>Open:</p>
+<p><strong>SEQUENCE_EDITOR → N-panel → QuickAddon</strong></p>
+<p>You now have:</p>
+<ul>
+<li>A button labeled <strong>Setup From Audio</strong></li>
+<li>A popup dialog for <code>audio_path</code> and <code>bpm</code></li>
+</ul>
+<p>Click <strong>Run</strong>.</p>
+<p>Your original function executes.</p>
+<p>That’s it.</p>
+<p>Quick note:</p>
+<ul>
+<li><code>Path</code> means your function receives a <code>Path</code></li>
+<li><code>str</code> means your function receives a <code>str</code></li>
+<li>UI hints like file pickers are separate from runtime type intent</li>
+</ul>
+<p>For example, this keeps a string while still using Blender’s filepath picker UI:</p>
+<pre><code class="language-python">@op(
+    label="Setup From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+    param_subtypes={"audio_path": "FILE_PATH"},
+)
+def setup_from_audio(
+    audio_path: str = "",
+    bpm: int = 120,
+):
+    print(type(audio_path), audio_path)
+    print("BPM:", bpm)
+</code></pre>
+<hr>
+<h3 id="step-5--add-more-functions"><a class="header" href="#step-5--add-more-functions">Step 5 – Add More Functions</a></h3>
+<p>Let’s add a second function to the same file.</p>
+<pre><code class="language-python">@op(
+    label="Setup From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+)
+def setup_from_audio(
+    audio_path: Path,
+    bpm: int = 120,
+):
+    print("Setup:", audio_path, bpm)
+
+
+@op(
+    label="Render From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+)
+def render_from_audio(
+    audio_path: Path,
+):
+    print("Render:", audio_path)
+</code></pre>
+<p>Rebuild and re-enable.</p>
+<p>What you will see:</p>
+<ul>
+<li>Two buttons</li>
+<li>Two popup dialogs</li>
+<li>Each function asks for <code>audio_path</code> independently</li>
+</ul>
+<p>That is perfectly valid if the two audio paths should be separate.</p>
+<p>But if both tools are meant to operate on the same audio file, repeatedly entering the path becomes unnecessary.</p>
+<p>This is where shared values come in.</p>
+<hr>
+<h3 id="now-make-it-shared"><a class="header" href="#now-make-it-shared">Now Make It Shared</a></h3>
+<p>Modify both decorators:</p>
+<pre><code class="language-python">@op(
+    label="Setup From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+    shared={
+        "audio_path": "project.audio_path",
+    },
+)
+def setup_from_audio(
+    audio_path: Path,
+    bpm: int = 120,
+):
+    print("Setup:", audio_path, bpm)
+
+
+@op(
+    label="Render From Audio",
+    space="SEQUENCE_EDITOR",
+    category="QuickAddon",
+    shared={
+        "audio_path": "project.audio_path",
+    },
+)
+def render_from_audio(
+    audio_path: Path,
+):
+    print("Render:", audio_path)
+</code></pre>
+<p>Rebuild.</p>
+<p>Now you will see:</p>
+<ul>
+<li><code>audio_path</code> appears once in the panel.</li>
+<li>It no longer appears in popup dialogs.</li>
+<li>Both functions use the same stored value.</li>
+<li>The value persists across runs.</li>
+</ul>
+<p>You enter the path once.</p>
+<p>Both functions use it.</p>
+<p>That is what “shared” means.</p>
+<p>You did not write storage code.
+You only declared that both functions reference the same shared key.</p>
+<p>Persistence is handled for you.</p>
+<hr>
+<p>If this feels clean and predictable, that is intentional.</p>
+<p>In the next chapter, we will examine how the generated host makes this possible.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="standalone-add-on"><a class="header" href="#standalone-add-on">Standalone Add-on</a></h1>
+<p>So far, you wrote a function and built an add-on.</p>
+<p>Now let’s look at what was actually generated.</p>
+<hr>
+<h2 id="what-actually-gets-generated"><a class="header" href="#what-actually-gets-generated">What Actually Gets Generated</a></h2>
+<p>Build into a temporary folder so we can inspect the output:</p>
+<pre><code class="language-bash">quickaddon build audiodeck.py \
+  --out ./dist \
+  --force
+</code></pre>
+<p>Now inspect the generated directory:</p>
+<pre><code class="language-bash">ls -R ./dist
+</code></pre>
+<p>You should see:</p>
+<pre><code>dist/
+└── audiodeck/
+    ├── __init__.py
+    ├── generated_ops.py
+    └── user_code.py
+</code></pre>
+<p><code>user_code.py</code> is simply a copy of your original Python file.
+Nothing special happens there. From this point forward, we will treat it as implicit and focus on the other two files.</p>
+<p>Those two files define the pattern.</p>
+<hr>
+<h2 id="file-1--generated_opspy"><a class="header" href="#file-1--generated_opspy">File 1 – <code>generated_ops.py</code></a></h2>
+<p>Open:</p>
+<pre><code>dist/audiodeck/generated_ops.py
+</code></pre>
+<p>This file is substantial — but you did not have to write it.</p>
+<p>Inside you will find:</p>
+<ul>
+<li>Generated Operator classes</li>
+<li>Shared parameter definitions</li>
+<li>UI draw helpers</li>
+<li>Registration hooks</li>
+</ul>
+<p>Example (trimmed):</p>
+<pre><code class="language-python">import bpy
+
+# Auto-generated by quickaddon
+# Source addon: Audiogen
+
+_SHARED_PTR_NAME = "qa_shared__audiogen"
+
+_HOST_API = None  # injected by host at register time
+
+class _FallbackHostAPI:
+    ...  
+
+class QA_SHARED_ROOT(bpy.types.PropertyGroup):
+    project__audio_path: bpy.props.StringProperty(name="audio_path", default='', subtype="FILE_PATH")
+
+
+class QA_OT_SETUP_FROM_AUDIO(bpy.types.Operator):
+    ...
+
+class QA_OT_RENDER_FROM_AUDIO(bpy.types.Operator):
+    ...
+    ...
+
+# Panel -&gt; ops mapping, used by host integration hooks
+PANEL_OPS = {
+    "QuickAddon": [
+        ("Setup From Audio", "qa_audiogen.setup_from_audio"),
+        ("Render From Audio", "qa_audiogen.render_from_audio"),
+    ],
+}
+
+def draw_shared(layout, context):
+    ...
+
+def draw_tools(layout, context, *, category=None):
+    ...
+
+def draw(layout, context, *, category=None, with_shared=True):
+    """
+    Host integration hook:
+      - with_shared=True draws shared inputs first.
+      - category controls which tool group(s) to draw.
+    """
+    if with_shared:
+        draw_shared(layout, context)
+        layout.separator()
+    draw_tools(layout, context, category=category)
+
+
+class QA_PT_SEQUENCE_EDITOR_QUICKADDON(bpy.types.Panel):
+    ...  
+    def draw(self, context):
+        layout = self.layout
+        draw(layout, context, category="QuickAddon", with_shared=True)
+
+_BASE_CLASSES = [
+    QA_SHARED_ROOT,
+    QA_OT_SETUP_FROM_AUDIO,
+    QA_OT_RENDER_FROM_AUDIO,
+]
+
+_PANEL_CLASSES = [
+    QA_PT_SEQUENCE_EDITOR_QUICKADDON,
+]
+
+# Prevent double-register in nested/plugin scenarios
+_IS_REGISTERED = False
+_REGISTERED_MODE = None
+
+def register(*, mode="plugin", host_api=None):
+    ...
+    for c in _BASE_CLASSES:
+        bpy.utils.register_class(c)
+
+    # namespaced shared ptr
+    setattr(
+        bpy.types.Scene,
+        _SHARED_PTR_NAME,
+        bpy.props.PointerProperty(type=QA_SHARED_ROOT),
+    )
+    ...
+
+def unregister():
+    ...
+    if hasattr(bpy.types.Scene, _SHARED_PTR_NAME):
+        delattr(bpy.types.Scene, _SHARED_PTR_NAME)
+
+    for c in reversed(_BASE_CLASSES):
+        bpy.utils.unregister_class(c)
+    ...
+</code></pre>
+<p>This file represents your Python functions transformed into Blender operators.</p>
+<p>It:</p>
+<ul>
+<li>Defines operator classes.</li>
+<li>Defines shared properties.</li>
+<li>Exposes drawing helpers.</li>
+<li>Registers base classes.</li>
+</ul>
+<p>It does <strong>not</strong> decide where shared values are ultimately stored when embedded in a larger system.
+It describes behavior and inputs.</p>
+<p>That distinction becomes important later.</p>
+<hr>
+<h2 id="file-2--__init__py"><a class="header" href="#file-2--__init__py">File 2 – <code>__init__.py</code></a></h2>
+<p>Open:</p>
+<pre><code>dist/audiodeck/__init__.py
+</code></pre>
+<p>This file is lightweight.</p>
+<p>You will see:</p>
+<ul>
+<li>Add-on metadata (<code>bl_info</code>)</li>
+<li>Registration logic</li>
+<li>A host wrapper</li>
+<li>Standalone panel wiring</li>
+</ul>
+<p>Example (trimmed):</p>
+<pre><code class="language-python">bl_info = {
+    "name": "Audiogen",
+    ...
+}
+
+from . import generated_ops
+
+class _StandaloneHostAPI:
+    ...
+
+def register():
+    generated_ops.register(
+        mode="plugin",
+        host_api=_StandaloneHostAPI(),
+    )
+
+def unregister():
+    generated_ops.unregister()
+</code></pre>
+<p>This file connects the generated add-on to Blender.</p>
+<p>It provides:</p>
+<ul>
+<li>Default shared storage</li>
+<li>HostAPI injection</li>
+<li>Add-on entry points</li>
+</ul>
+<p>In standalone mode, this wrapper acts as the host.</p>
+<hr>
+<h2 id="the-visual-pattern"><a class="header" href="#the-visual-pattern">The Visual Pattern</a></h2>
+<p>When you enable the add-on, the layers look like this:</p>
+<pre><code>Your Functions
+      ↓ used by
+generated_ops.py  (behavior + operators)
+      ↓ used by
+__init__.py       (standalone host wrapper)
+      ↓ used by
+Blender UI + Storage
+</code></pre>
+<p>Two files.
+Two responsibilities.</p>
+<p>You wrote one function.
+QuickAddon generated the layers and wiring around it.</p>
+<p>You now recognize the shape of a standalone QuickAddon add-on.</p>
+<p>In the next chapter, we will see how this same structure enables embedding inside another host.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="embedding-plugins"><a class="header" href="#embedding-plugins">Embedding Plugins</a></h1>
+<p>This is where we start assembling systems from our Lego pieces.</p>
+<p>In the previous chapter, we generated and used <code>audiodeck</code>.</p>
+<p>Now consider this situation:</p>
+<ul>
+<li><strong>audiodeck</strong> was generated first.</li>
+<li>You enabled it. It works.</li>
+<li>Later, you generated <strong>audio_encode</strong>.</li>
+<li>It also works standalone.</li>
+</ul>
+<p>Their functionality is related.</p>
+<p>Now you want:</p>
+<blockquote>
+<p><strong>audio_encode</strong> to appear inside <strong>audiodeck</strong>’s panel
+without enabling <strong>audio_encode</strong> separately.</p>
+</blockquote>
+<p>We are staying entirely inside the QuickAddon ecosystem.
+Let’s walk through the process.</p>
+<hr>
+<h2 id="step-1--start-from-two-generated-add-ons"><a class="header" href="#step-1--start-from-two-generated-add-ons">Step 1 – Start from Two Generated Add-ons</a></h2>
+<p>After building both, your add-ons directory looks like:</p>
+<pre><code class="language-text">.../scripts/addons/
+├── audiodeck/
+│   ├── __init__.py
+│   └── generated_ops.py
+└── audio_encode/
+    ├── __init__.py
+    └── generated_ops.py
+</code></pre>
+<p>Each add-on works independently in standalone mode.</p>
+<hr>
+<h2 id="step-2--embed-audio_encode-inside-audiodeck"><a class="header" href="#step-2--embed-audio_encode-inside-audiodeck">Step 2 – Embed <code>audio_encode</code> Inside <code>audiodeck</code></a></h2>
+<p>We will embed <code>audio_encode</code> physically inside <code>audiodeck</code>.</p>
+<p>Final layout:</p>
+<pre><code class="language-text">.../scripts/addons/
+└── audiodeck/
+    ├── __init__.py
+    ├── generated_ops.py
+    └── audio_encode/
+        ├── __init__.py
+        └── generated_ops.py
+</code></pre>
+<p>What changed?</p>
+<ul>
+<li>We moved <code>audio_encode/</code> inside <code>audiodeck/</code>.</li>
+<li>Blender now sees only <code>audiodeck</code> as an add-on to enable.</li>
+</ul>
+<p><code>audio_encode</code> becomes a module inside the host.</p>
+<hr>
+<h2 id="step-3--modify-audiodeck"><a class="header" href="#step-3--modify-audiodeck">Step 3 – Modify <code>audiodeck</code></a></h2>
+<p>Open:</p>
+<pre><code class="language-text">audiodeck/__init__.py
+</code></pre>
+<h3 id="add-the-import"><a class="header" href="#add-the-import">Add the import</a></h3>
+<pre><code class="language-python">from .audio_encode import generated_ops as audio_encode_ops
+</code></pre>
+<hr>
+<h3 id="update-register"><a class="header" href="#update-register">Update <code>register()</code></a></h3>
+<p>Extend <code>register()</code>:</p>
+<pre><code class="language-python">def register():
+    # audiodeck registration (already generated)
+    ...
+
+    # Register audio_encode in plugin mode and mount one named instance
+    audio_encode_ops.register(mode="plugin", host_api=_HOST_API)
+    audio_encode_ops.mount_instance("encode")
+</code></pre>
+<p>Update <code>unregister()</code> accordingly:</p>
+<pre><code class="language-python">def unregister():
+    audio_encode_ops.unregister()
+
+    # audiodeck unregister logic
+    ...
+</code></pre>
+<p>Important:</p>
+<p>We use <code>mode="plugin"</code> and then explicitly mount a named instance.</p>
+<p>This means:</p>
+<ul>
+<li><code>audio_encode</code> registers its operators.</li>
+<li><code>audio_encode</code> prepares its hosted runtime.</li>
+<li><code>audio_encode</code> does <strong>not</strong> create its own panel.</li>
+<li><code>audio_encode</code> does <strong>not</strong> create a hidden default instance.</li>
+</ul>
+<p>Even in the standalone case in the previous chapter, we used <code>mode="plugin"</code> - this is the default and most common mode.</p>
+<blockquote>
+<p>The other modes exist purely for QuickAddon author’s debugging convenience.</p>
+</blockquote>
+<hr>
+<h3 id="update-audiodecks-panel-draw"><a class="header" href="#update-audiodecks-panel-draw">Update <code>audiodeck</code>’s Panel <code>draw()</code></a></h3>
+<p>Inside <code>audiodeck</code>’s panel class:</p>
+<pre><code class="language-python">def draw(self, context):
+    layout = self.layout
+
+    _HOST_API.draw_registered(layout, context)
+</code></pre>
+<p>That is the entire integration layer.</p>
+<p>No changes were made to <code>audio_encode</code> itself.</p>
+<hr>
+<h2 id="step-4--enable-only-audiodeck"><a class="header" href="#step-4--enable-only-audiodeck">Step 4 – Enable Only <code>audiodeck</code></a></h2>
+<p>In Blender:</p>
+<ul>
+<li>Disable <code>audio_encode</code> (if it was previously enabled).</li>
+<li>Enable <code>audiodeck</code>.</li>
+</ul>
+<p>Result:</p>
+<ul>
+<li>Only one panel appears (<code>audiodeck</code>).</li>
+<li><code>audio_encode</code> buttons appear inside it.</li>
+<li>Shared inputs render correctly.</li>
+<li><code>audio_encode</code> functions execute normally.</li>
+</ul>
+<hr>
+<h2 id="what-just-happened-1"><a class="header" href="#what-just-happened-1">What Just Happened</a></h2>
+<p>Standalone <code>audio_encode</code>:</p>
+<pre><code class="language-text">audio_encode __init__.py
+    └── creates its own panel
+</code></pre>
+<p>Embedded <code>audio_encode</code>:</p>
+<pre><code class="language-text">audiodeck __init__.py
+    ├── registers audio_encode (plugin mode)
+    ├── mounts a named instance
+    └── lets HostAPI render registered plugin UI
+</code></pre>
+<p><code>audio_encode</code> still contains:</p>
+<ul>
+<li>Its operators</li>
+<li>Its shared keys</li>
+<li>Its generated plumbing</li>
+</ul>
+<p>Only <code>audiodeck</code> now controls:</p>
+<ul>
+<li>Panel ownership</li>
+<li>UI composition</li>
+<li>Instance naming</li>
+</ul>
+<hr>
+<h2 id="what-has-not-changed"><a class="header" href="#what-has-not-changed">What Has NOT Changed</a></h2>
+<ul>
+<li>The <code>audio_encode</code> tool script</li>
+<li>Its shared key declarations</li>
+<li>Its operator logic</li>
+<li>Its build process</li>
+</ul>
+<p>Embedding modifies only the host (<code>audiodeck</code>).</p>
+<p>The plugin remains untouched.</p>
+<hr>
+<h2 id="where-are-shared-values-stored"><a class="header" href="#where-are-shared-values-stored">Where Are Shared Values Stored?</a></h2>
+<p>At this stage:</p>
+<ul>
+<li><code>audio_encode</code> still uses its generated fallback storage.</li>
+<li><code>audiodeck</code> does not yet own <code>audio_encode</code>’s shared values.</li>
+</ul>
+<p>In the next chapter, we will transfer ownership.</p>
+<p>That is where the HostAPI contract becomes visible.</p>
+<hr>
+<p>You now understand:</p>
+<ul>
+<li>How two generated add-ons relate</li>
+<li>How one becomes the host</li>
+<li>How a plugin is physically embedded</li>
+<li>How registration is redirected</li>
+<li>How UI is delegated</li>
+</ul>
+<p>Next, we will make <code>audiodeck</code> own <code>audio_encode</code>’s shared values.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="host-ownership-of-shared-values"><a class="header" href="#host-ownership-of-shared-values">Host Ownership of Shared Values</a></h1>
+<p>In the previous chapter:</p>
+<ul>
+<li><code>audiodeck</code> became the host.</li>
+<li><code>audio_encode</code> was embedded inside it.</li>
+<li>The UI was unified.</li>
+<li>Only <code>audiodeck</code> was enabled.</li>
+</ul>
+<p>However, one important thing has <strong>not</strong> changed yet.</p>
+<p><code>audio_encode</code> is still storing its shared values in fallback storage.</p>
+<hr>
+<h2 id="current-state"><a class="header" href="#current-state">Current State</a></h2>
+<p>Right now, shared values for <code>audio_encode</code> live in:</p>
+<pre><code class="language-text id=&quot;oqexxk&quot;">context.scene.qa_shared
+</code></pre>
+<p>So even though:</p>
+<ul>
+<li><code>audiodeck</code> controls the panel</li>
+<li><code>audio_encode</code> renders inside it</li>
+</ul>
+<p>The data is still owned by generated fallback storage.</p>
+<blockquote>
+<p><code>audiodeck</code> controls the UI, but not the data.</p>
+</blockquote>
+<hr>
+<h2 id="why-this-matters"><a class="header" href="#why-this-matters">Why This Matters</a></h2>
+<p>Suppose <code>audiodeck</code> already defines its own property group:</p>
+<pre><code class="language-python id=&quot;qz91md&quot;">class AudioDeckProps(bpy.types.PropertyGroup):
+    audio_path: bpy.props.StringProperty(
+        name="Audio Path",
+        subtype="FILE_PATH"
+    )
+</code></pre>
+<p>And suppose it is registered as:</p>
+<pre><code class="language-python id=&quot;qykpcc&quot;">bpy.types.Scene.audiodeck_props = bpy.props.PointerProperty(
+    type=AudioDeckProps
+)
+</code></pre>
+<p>Now we have two places storing the same concept:</p>
+<pre><code class="language-text id=&quot;3ntpmp&quot;">context.scene.audiodeck_props.audio_path
+context.scene.qa_shared.project__audio_path
+</code></pre>
+<p>Two values.
+One meaning.</p>
+<p>That duplication is unnecessary.</p>
+<p>If <code>audiodeck</code> is the host, it should own the data.</p>
+<hr>
+<h2 id="the-mechanism-hostapi"><a class="header" href="#the-mechanism-hostapi">The Mechanism: HostAPI</a></h2>
+<p>When <code>audio_encode</code> reads or draws a shared value, it does <strong>not</strong> directly access storage.</p>
+<p>Instead, it calls:</p>
+<pre><code class="language-python id=&quot;7ekp3r&quot;">host_api.get(...)
+host_api.draw(...)
+</code></pre>
+<p>Until now, we were relying on the default fallback host.</p>
+<p>Now we will provide our own.</p>
+<hr>
+<h2 id="step-1--implement-a-minimal-hostapi-in-audiodeck"><a class="header" href="#step-1--implement-a-minimal-hostapi-in-audiodeck">Step 1 – Implement a Minimal HostAPI in <code>audiodeck</code></a></h2>
+<p>Open:</p>
+<pre><code class="language-text id=&quot;v6ylxj&quot;">audiodeck/__init__.py
+</code></pre>
+<p>Add the following class:</p>
+<pre><code class="language-python id=&quot;9cskv1&quot;">class AudioDeckHostAPI:
+
+    def get(self, context, key, fallback_prop):
+        if key == "project.audio_path":
+            return context.scene.audiodeck_props.audio_path
+
+        # fallback for unknown keys
+        return getattr(context.scene.qa_shared, fallback_prop)
+
+    def draw(self, layout, context, key, fallback_prop, label=None):
+        if key == "project.audio_path":
+            layout.prop(
+                context.scene.audiodeck_props,
+                "audio_path",
+                text=label
+            )
+        else:
+            layout.prop(
+                context.scene.qa_shared,
+                fallback_prop,
+                text=label
+            )
+</code></pre>
+<p>This class does two things:</p>
+<ul>
+<li>Routes <code>"project.audio_path"</code> into <code>audiodeck_props</code>.</li>
+<li>Falls back to generated storage for all other shared keys.</li>
+</ul>
+<p>The plugin does not change.
+Only the host’s routing logic changes.</p>
+<hr>
+<h2 id="step-2--inject-the-hostapi"><a class="header" href="#step-2--inject-the-hostapi">Step 2 – Inject the HostAPI</a></h2>
+<p>Modify the registration of <code>audio_encode</code> inside <code>audiodeck.register()</code>:</p>
+<pre><code class="language-python id=&quot;5uf1vt&quot;">audio_encode_ops.register(
+    mode="plugin",
+    host_api=AudioDeckHostAPI()
+)
+</code></pre>
+<p>That is the entire ownership transfer.</p>
+<hr>
+<h2 id="what-changed"><a class="header" href="#what-changed">What Changed?</a></h2>
+<p>Before:</p>
+<pre><code class="language-text id=&quot;0g6l0g&quot;">audio_encode
+    └── qa_shared
+</code></pre>
+<p>After:</p>
+<pre><code class="language-text id=&quot;8kux8x&quot;">audio_encode
+    └── HostAPI
+          └── audiodeck_props
+</code></pre>
+<p>Now:</p>
+<ul>
+<li><code>audio_encode</code> reads from <code>audiodeck</code> storage.</li>
+<li><code>audio_encode</code> draws <code>audiodeck</code> properties.</li>
+<li>Fallback storage remains available for other shared keys.</li>
+</ul>
+<hr>
+<h2 id="what-did-not-change"><a class="header" href="#what-did-not-change">What Did NOT Change</a></h2>
+<ul>
+<li><code>audio_encode</code> tool script</li>
+<li><code>audio_encode</code> shared decorator</li>
+<li><code>audio_encode</code> operator logic</li>
+<li><code>audio_encode</code> build process</li>
+</ul>
+<p>Only <code>audiodeck</code> changed.</p>
+<p>The plugin remains generated, reusable, and composable.</p>
+<hr>
+<h2 id="what-you-have-now"><a class="header" href="#what-you-have-now">What You Have Now</a></h2>
+<p>At this point:</p>
+<ul>
+<li>UI ownership belongs to <code>audiodeck</code>.</li>
+<li>Data ownership belongs to <code>audiodeck</code>.</li>
+<li><code>audio_encode</code> remains independent and reusable.</li>
+<li>The relationship is defined entirely through the HostAPI contract.</li>
+</ul>
+<p>In the next chapter, we will make this routing scalable — so you do not have to write <code>if key == ...</code> for every shared value.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="hostapi--the-routing-contract"><a class="header" href="#hostapi--the-routing-contract">HostAPI – The Routing Contract</a></h1>
+<p>In the previous chapter, we transferred shared value ownership from fallback storage into <code>audiodeck</code>.</p>
+<p>We did this by injecting a <code>HostAPI</code> implementation.</p>
+<p>Now we formalize what that means.</p>
+<p>This chapter defines the HostAPI contract.</p>
+<hr>
+<h2 id="why-hostapi-exists"><a class="header" href="#why-hostapi-exists">Why HostAPI Exists</a></h2>
+<p>A generated plugin never directly accesses storage.</p>
+<p>It does not read from:</p>
+<pre><code class="language-text">context.scene.qa_shared
+</code></pre>
+<p>It does not read from:</p>
+<pre><code class="language-text">context.scene.audiodeck_props
+</code></pre>
+<p>Instead, whenever a shared value is:</p>
+<ul>
+<li>Read</li>
+<li>Drawn in the UI</li>
+</ul>
+<p>The plugin calls:</p>
+<pre><code class="language-python">host_api.get(context, key, fallback_prop)
+host_api.draw(layout, context, key, fallback_prop, label=...)
+</code></pre>
+<p>The plugin speaks only in <strong>shared keys</strong>.</p>
+<p>The host decides where those keys live.</p>
+<p>That separation is the purpose of HostAPI.</p>
+<hr>
+<h2 id="core-terms"><a class="header" href="#core-terms">Core Terms</a></h2>
+<h3 id="shared-key"><a class="header" href="#shared-key">Shared Key</a></h3>
+<p>A stable identifier defined in the plugin decorator:</p>
+<pre><code class="language-python">shared={"audio_path": "project.audio_path"}
+</code></pre>
+<p>The plugin only knows:</p>
+<pre><code class="language-text">"project.audio_path"
+</code></pre>
+<p>It does not know how that key is stored.</p>
+<hr>
+<h3 id="fallback-property"><a class="header" href="#fallback-property">Fallback Property</a></h3>
+<p>A generated property name derived from the shared key:</p>
+<pre><code class="language-text">project__audio_path
+</code></pre>
+<p>This exists so the plugin can function in standalone mode.</p>
+<p>If the host does not serve a key, fallback storage is used.</p>
+<hr>
+<h2 id="required-methods"><a class="header" href="#required-methods">Required Methods</a></h2>
+<p>A HostAPI implementation must define:</p>
+<pre><code class="language-python">class HostAPI:
+
+    def get(self, context, key: str, fallback_prop: str):
+        """
+        Return the value for shared key `key`.
+
+        - `key` is the shared key (e.g. "project.audio_path")
+        - `fallback_prop` is the generated fallback property name
+        """
+        ...
+
+    def draw(self, layout, context, key: str, fallback_prop: str, *, label=None):
+        """
+        Draw the UI control for shared key `key`.
+
+        Must draw something:
+        - host-owned property
+        - or fallback property
+        """
+        ...
+</code></pre>
+<p>These two methods form the entire routing contract.</p>
+<p>Nothing else is required.</p>
+<hr>
+<h2 id="fallback-behavior"><a class="header" href="#fallback-behavior">Fallback Behavior</a></h2>
+<p>If a host does not serve a shared key:</p>
+<pre><code class="language-python">return getattr(context.scene.qa_shared, fallback_prop)
+</code></pre>
+<p>and</p>
+<pre><code class="language-python">layout.prop(context.scene.qa_shared, fallback_prop, text=label)
+</code></pre>
+<p>This ensures:</p>
+<ul>
+<li>Plugins remain functional without a host.</li>
+<li>Hosts can adopt routing incrementally.</li>
+<li>Shared ownership is optional, not mandatory.</li>
+</ul>
+<p>Fallback is not a special case — it is part of the design.</p>
+<hr>
+<h2 id="injection-model"><a class="header" href="#injection-model">Injection Model</a></h2>
+<p>When embedding a plugin, the host injects its HostAPI:</p>
+<pre><code class="language-python">audio_encode_ops.register(
+    mode="plugin",
+    host_api=AudioDeckHostAPI()
+)
+</code></pre>
+<p>The plugin never creates the HostAPI itself.</p>
+<p>The host always controls:</p>
+<ul>
+<li>Whether a HostAPI is provided</li>
+<li>Which implementation is used</li>
+</ul>
+<p>Control remains centralized.</p>
+<hr>
+<h2 id="design-discipline"><a class="header" href="#design-discipline">Design Discipline</a></h2>
+<p>HostAPI is:</p>
+<ul>
+<li>A routing layer</li>
+<li>Not a transformation layer</li>
+<li>Not a validation framework</li>
+<li>Not a business logic container</li>
+</ul>
+<p>It should:</p>
+<ul>
+<li>Map keys to storage</li>
+<li>Draw the correct property</li>
+<li>Preserve fallback behavior</li>
+</ul>
+<p>Nothing more.</p>
+<hr>
+<h2 id="what-hostapi-is-not"><a class="header" href="#what-hostapi-is-not">What HostAPI Is Not</a></h2>
+<p>HostAPI does not:</p>
+<ul>
+<li>Know which plugin requested a key</li>
+<li>Store plugin identity</li>
+<li>Mutate shared keys</li>
+<li>Enforce global state</li>
+</ul>
+<p>It is intentionally minimal.</p>
+<hr>
+<h2 id="where-we-are"><a class="header" href="#where-we-are">Where We Are</a></h2>
+<p>At this point, you understand:</p>
+<ul>
+<li>Plugins declare shared keys.</li>
+<li>Plugins never access storage directly.</li>
+<li>Hosts inject HostAPI.</li>
+<li>HostAPI routes shared keys to storage.</li>
+</ul>
+<p>In the next chapter, we will implement a clean and scalable routing pattern inside <code>audiodeck</code>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="property-ownership--a-clean-routing-pattern"><a class="header" href="#property-ownership--a-clean-routing-pattern">Property Ownership – A Clean Routing Pattern</a></h1>
+<p>In the previous chapter, we formalized the HostAPI contract.</p>
+<p>We saw that:</p>
+<ul>
+<li>Plugins speak in shared keys.</li>
+<li>Hosts decide where those keys live.</li>
+<li>Routing happens through <code>get()</code> and <code>draw()</code>.</li>
+</ul>
+<p>Earlier, we implemented routing using:</p>
+<pre><code class="language-python">if key == "project.audio_path":
+    ...
+</code></pre>
+<p>That works for one key.</p>
+<p>It does not scale.</p>
+<p>This chapter introduces a clean, declarative routing pattern.</p>
+<hr>
+<h2 id="the-problem-with-if-chains"><a class="header" href="#the-problem-with-if-chains">The Problem with <code>if</code> Chains</a></h2>
+<p>Suppose <code>audio_encode</code> defines three shared keys:</p>
+<pre><code class="language-python">shared={
+    "audio_path": "project.audio_path",
+    "bpm": "project.bpm",
+    "output_dir": "project.output_dir",
+}
+</code></pre>
+<p>Writing:</p>
+<pre><code class="language-python">if key == ...
+elif key == ...
+elif key == ...
+</code></pre>
+<p>Becomes repetitive and fragile.</p>
+<p>As the number of shared keys grows, branching logic becomes harder to reason about and maintain.</p>
+<p>We want:</p>
+<ul>
+<li>Explicit mapping</li>
+<li>Easy extension</li>
+<li>No branching logic explosion</li>
+<li>Clear ownership declaration</li>
+</ul>
+<hr>
+<h2 id="step-1--define-a-keymap"><a class="header" href="#step-1--define-a-keymap">Step 1 – Define a KEYMAP</a></h2>
+<p>Inside <code>audiodeck/__init__.py</code>:</p>
+<pre><code class="language-python">KEYMAP = {
+    "project.audio_path": ("audiodeck_props", "audio_path"),
+    "project.bpm": ("audiodeck_props", "bpm"),
+    "project.output_dir": ("audiodeck_props", "output_dir"),
+}
+</code></pre>
+<p>Each entry maps:</p>
+<pre><code class="language-text">shared_key → (property_group_name, attribute_name)
+</code></pre>
+<p>This makes ownership explicit and declarative.</p>
+<p>The host now clearly states:</p>
+<blockquote>
+<p>“These shared keys belong to these properties.”</p>
+</blockquote>
+<hr>
+<h2 id="step-2--refactor-hostapi-to-use-keymap"><a class="header" href="#step-2--refactor-hostapi-to-use-keymap">Step 2 – Refactor HostAPI to Use KEYMAP</a></h2>
+<p>Replace the earlier implementation with:</p>
+<pre><code class="language-python">class AudioDeckHostAPI:
+
+    def get(self, context, key, fallback_prop):
+        if key in KEYMAP:
+            group_name, attr = KEYMAP[key]
+            group = getattr(context.scene, group_name)
+            return getattr(group, attr)
+
+        return getattr(context.scene.qa_shared, fallback_prop)
+
+    def draw(self, layout, context, key, fallback_prop, label=None):
+        if key in KEYMAP:
+            group_name, attr = KEYMAP[key]
+            group = getattr(context.scene, group_name)
+            layout.prop(group, attr, text=label)
+        else:
+            layout.prop(
+                context.scene.qa_shared,
+                fallback_prop,
+                text=label
+            )
+</code></pre>
+<p>Routing is now centralized.</p>
+<p>No condition chains.
+No duplication.
+No hidden logic.</p>
+<hr>
+<h2 id="adding-a-new-shared-key"><a class="header" href="#adding-a-new-shared-key">Adding a New Shared Key</a></h2>
+<p>To route a new key, modify only the KEYMAP:</p>
+<pre><code class="language-python">KEYMAP["project.sample_rate"] = ("audiodeck_props", "sample_rate")
+</code></pre>
+<p>No other code changes are required.</p>
+<p>Growth becomes mechanical.</p>
+<hr>
+<h2 id="fallback-still-works"><a class="header" href="#fallback-still-works">Fallback Still Works</a></h2>
+<p>If a shared key is not listed in KEYMAP:</p>
+<ul>
+<li>It automatically uses fallback storage.</li>
+<li>The plugin continues to function.</li>
+<li>Ownership transfer can be incremental.</li>
+</ul>
+<p>This makes adoption safe and predictable.</p>
+<hr>
+<h2 id="discipline-guidelines"><a class="header" href="#discipline-guidelines">Discipline Guidelines</a></h2>
+<p>To keep routing reliable:</p>
+<ul>
+<li>Shared keys must match exactly.</li>
+<li>Host property types must match plugin expectations.</li>
+<li>Avoid transforming values inside HostAPI.</li>
+<li>Keep KEYMAP static and explicit.</li>
+</ul>
+<p>HostAPI is a routing layer.
+It should remain simple.</p>
+<hr>
+<h2 id="what-you-now-have"><a class="header" href="#what-you-now-have">What You Now Have</a></h2>
+<p>At this point:</p>
+<ul>
+<li>UI ownership belongs to <code>audiodeck</code>.</li>
+<li>Data ownership belongs to <code>audiodeck</code>.</li>
+<li>Routing is scalable.</li>
+<li>Fallback behavior is preserved.</li>
+<li>Plugins remain reusable.</li>
+</ul>
+<p>In the next chapter, we extend this model to multiple embedded plugins.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="multi-plugin-hosts-and-generated-routing"><a class="header" href="#multi-plugin-hosts-and-generated-routing">Multi-Plugin Hosts and Generated Routing</a></h1>
+<p>At this point, you have built a proper host.</p>
+<p>Inside <code>audiodeck</code>:</p>
+<ul>
+<li>Shared keys are centralized in <code>KEYMAP</code>.</li>
+<li><code>HostAPI</code> routes through that map.</li>
+<li>Fallback storage remains intact.</li>
+<li>Plugins remain unaware of storage details.</li>
+</ul>
+<p>The system is clean.
+It scales.
+It is generic.</p>
+<p>You now have a host that can serve any embedded plugin.</p>
+<hr>
+<h2 id="serving-multiple-plugins"><a class="header" href="#serving-multiple-plugins">Serving Multiple Plugins</a></h2>
+<p>Suppose you embed a second plugin <code>audio_render</code>:</p>
+<pre><code class="language-text id=&quot;1vtnp0&quot;">audiodeck/
+├── audio_encode/
+└── audio_render/
+</code></pre>
+<p>Registration:</p>
+<pre><code class="language-python id=&quot;d8p7a1&quot;">audio_encode_ops.register(
+    mode="plugin",
+    host_api=AudioDeckHostAPI()
+)
+audio_encode_ops.mount_instance("encode")
+
+audio_render_ops.register(
+    mode="plugin",
+    host_api=AudioDeckHostAPI()
+)
+audio_render_ops.mount_instance("render")
+</code></pre>
+<p>Both plugins speak in shared keys.</p>
+<p>Both are routed through the same <code>KEYMAP</code>. Update the <code>KEYMAP</code> to include <code>audio_render's</code> routing.</p>
+<p>Routing is based on keys — not plugin identity.</p>
+<p>Your host is now a system boundary.</p>
+<hr>
+<h2 id="the-routing-layer-is-generic"><a class="header" href="#the-routing-layer-is-generic">The Routing Layer Is Generic</a></h2>
+<p>Notice what your <code>HostAPI</code> does <strong>not</strong> do:</p>
+<ul>
+<li>It does not know which plugin requested a key.</li>
+<li>It does not track plugin identity.</li>
+<li>It does not contain business logic.</li>
+</ul>
+<p>Everything flows through:</p>
+<pre><code class="language-text id=&quot;x6e2kn&quot;">Plugin → HostAPI → KEYMAP → Storage
+</code></pre>
+<p>This is composability.</p>
+<p>Plugins snap into the host.
+Shared keys connect through the map.
+Ownership remains centralized.</p>
+<hr>
+<h2 id="look-at-what-you-built"><a class="header" href="#look-at-what-you-built">Look at What You Built</a></h2>
+<p>You wrote:</p>
+<ul>
+<li>A declarative <code>KEYMAP</code></li>
+<li>A mechanical <code>HostAPI</code></li>
+<li>A predictable registration + mounting pattern</li>
+</ul>
+<p>There is no dynamic behavior in this routing layer.
+No heuristics.
+No introspection.</p>
+<p>It is entirely structural.</p>
+<hr>
+<h2 id="a-natural-question"><a class="header" href="#a-natural-question">A Natural Question</a></h2>
+<p>If this structure is predictable…</p>
+<p>If every host follows the same pattern…</p>
+<p>If shared keys are already declared in decorators…</p>
+<p>Why are we writing this by hand?</p>
+<p>Let’s pause on the idea of generated keymap routing.</p>
+<p>With this idea:</p>
+<ul>
+<li>Shared keys declared in the host are collected.</li>
+<li>Embedded plugin shared keys are collected.</li>
+<li>A <code>KEYMAP</code> is generated.</li>
+<li>A default <code>HostAPI</code> is emitted.</li>
+<li>Fallback behavior is preserved.</li>
+</ul>
+<p>The structure you just implemented manually could, in principle, be generated automatically.</p>
+<hr>
+<h2 id="build-manually-then-automate"><a class="header" href="#build-manually-then-automate">Build Manually, Then Automate</a></h2>
+<p>You now understand:</p>
+<ul>
+<li>The contract</li>
+<li>The ownership model</li>
+<li>The routing boundary</li>
+</ul>
+<p>Automation without understanding creates dependency.
+Understanding before automation creates control.</p>
+<p>That is why we built the routing layer manually first.</p>
+<p>We will revisit automation much later in the book.</p>
+<p>Before that, we need to cover a few more structural foundations.</p>
+<hr>
+<h2 id="where-we-stand"><a class="header" href="#where-we-stand">Where We Stand</a></h2>
+<p>At this stage:</p>
+<ul>
+<li>Hosts own UI.</li>
+<li>Hosts own shared data.</li>
+<li>Multiple plugins are supported.</li>
+<li>Routing is centralized.</li>
+<li>Plugin instances are explicit and named.</li>
+<li>Generation removes boilerplate.</li>
+</ul>
+<p>But how does this fit into the existing add-on ecosystem?</p>
+<p>In Chapter 11, we will step outside the generated world and refactor a hand-written add-on into a host.</p>
+<p>Next, we address an important issue for add-on developers — and how the generator proposes a disciplined solution.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="cooperative-long-running-tasks"><a class="header" href="#cooperative-long-running-tasks">Cooperative Long-Running Tasks</a></h1>
+<p>Now that we have built an add-on and executed our functions, we must address an important concern for serious add-on development.</p>
+<p>Up to this point, every plugin function executes immediately.</p>
+<p>That works for:</p>
+<ul>
+<li>Small tasks</li>
+<li>Quick transformations</li>
+<li>Lightweight operations</li>
+</ul>
+<p>But real tools often perform:</p>
+<ul>
+<li>Frame-by-frame processing</li>
+<li>Batch encoding</li>
+<li>File iteration</li>
+<li>Heavy analysis</li>
+</ul>
+<p>If executed in a single operator call, Blender freezes.</p>
+<p>Operators run on the main thread.</p>
+<p>If a task takes 10 minutes,
+the UI blocks for 10 minutes.</p>
+<p>That is not acceptable for serious tools.</p>
+<hr>
+<h2 id="the-cooperative-model"><a class="header" href="#the-cooperative-model">The Cooperative Model</a></h2>
+<p>Instead of blocking execution, we introduce:</p>
+<blockquote>
+<p>Cooperative long-running tasks.</p>
+</blockquote>
+<p>The idea is simple:</p>
+<ul>
+<li>A task performs a small unit of work.</li>
+<li>It yields control back to Blender.</li>
+<li>The host schedules the next step.</li>
+<li>Progress is tracked.</li>
+<li>The user can cancel.</li>
+</ul>
+<p>This is similar to how rendering progresses frame by frame.</p>
+<p>Blender stays responsive.</p>
+<hr>
+<h2 id="declaring-a-long-task"><a class="header" href="#declaring-a-long-task">Declaring a Long Task</a></h2>
+<p>A plugin may declare:</p>
+<pre><code class="language-python">@op(
+    label="Process Frames",
+    long_task=True,
+)
+def process_frames(...):
+    ...
+</code></pre>
+<p>If <code>long_task=True</code>, the function must follow a contract.</p>
+<p>That contract defines:</p>
+<ul>
+<li>How incremental work is performed</li>
+<li>How progress is reported</li>
+<li>How cancellation is respected</li>
+<li>How cleanup is handled</li>
+</ul>
+<p>Plugins do not implement scheduling.</p>
+<p>The host owns execution control.</p>
+<hr>
+<h2 id="cancellation-model"><a class="header" href="#cancellation-model">Cancellation Model</a></h2>
+<p>Cancellation must be explicit and predictable.</p>
+<p>QuickAddon long tasks must provide a visible cancellation mechanism
+similar to Blender’s “Render Animation” operator.</p>
+<p>The host must provide:</p>
+<ul>
+<li>A progress indicator</li>
+<li>A visible cancel control (e.g., button or “X”)</li>
+<li>Proper cleanup on cancellation</li>
+</ul>
+<p>ESC behavior:</p>
+<p>ESC may cancel the task <strong>only when the long-task modal operator
+actively owns execution focus</strong>, similar to Blender rendering.</p>
+<p>ESC must not:</p>
+<ul>
+<li>Cancel unrelated background work</li>
+<li>Interfere with normal Blender interaction</li>
+<li>Trigger cancellation unintentionally while the user performs other actions</li>
+</ul>
+<p>The recommended model mirrors Blender’s native rendering workflow:</p>
+<p>User starts task<br>→ Progress appears<br>→ Cancel button is visible<br>→ ESC cancels only while task is modal-owner</p>
+<p>Cancellation is a host responsibility.
+Plugins must tolerate interruption.</p>
+<hr>
+<h2 id="why-this-matters-1"><a class="header" href="#why-this-matters-1">Why This Matters</a></h2>
+<p>As tools grow:</p>
+<ul>
+<li>Processing time increases</li>
+<li>Users expect responsiveness</li>
+<li>Cancellation becomes critical</li>
+<li>Stability becomes non-negotiable</li>
+</ul>
+<p>A disciplined long-task model allows:</p>
+<ul>
+<li>Non-blocking execution</li>
+<li>Progress feedback</li>
+<li>Safe cancellation</li>
+<li>Predictable lifecycle management</li>
+</ul>
+<p>We will define the full long-task contract and implementation details in Chapter 13.</p>
+<p>For now, understand the boundary:</p>
+<p>Plugins may declare long tasks.
+Hosts own scheduling and execution control.</p>
+<p>In the next chapter, we step outside the generated ecosystem and refactor an existing add-on into a host.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="refactoring-an-existing-add-on-into-a-host"><a class="header" href="#refactoring-an-existing-add-on-into-a-host">Refactoring an Existing Add-on into a Host</a></h1>
+<p>So far, we have stayed inside the generated ecosystem.</p>
+<p>Now we step outside it.</p>
+<p>Suppose you already have a working Blender add-on.</p>
+<p>It was written manually.
+It grew over time.
+It works.
+But it feels heavier than it should.</p>
+<p>We will refactor it into a proper host.</p>
+<hr>
+<h2 id="the-starting-point"><a class="header" href="#the-starting-point">The Starting Point</a></h2>
+<p>Consider a simplified existing add-on:</p>
+<pre><code class="language-python id=&quot;0sxy9r&quot;">class AUDIO_OT_encode(bpy.types.Operator):
+    bl_idname = "audio.encode"
+    bl_label = "Encode Audio"
+
+    def execute(self, context):
+        path = context.scene.audio_path
+        bitrate = context.scene.bitrate
+        print("Encoding:", path, bitrate)
+        return {'FINISHED'}
+
+
+class AUDIO_OT_render(bpy.types.Operator):
+    bl_idname = "audio.render"
+    bl_label = "Render Audio"
+
+    def execute(self, context):
+        path = context.scene.audio_path
+        print("Rendering:", path)
+        return {'FINISHED'}
+
+
+class AUDIO_PT_panel(bpy.types.Panel):
+    bl_label = "Audio Tools"
+    bl_space_type = 'SEQUENCE_EDITOR'
+    bl_region_type = 'UI'
+    bl_category = "Audio"
+
+    def draw(self, context):
+        layout = self.layout
+        layout.prop(context.scene, "audio_path")
+        layout.prop(context.scene, "bitrate")
+        layout.operator("audio.encode")
+        layout.operator("audio.render")
+</code></pre>
+<p>This works.</p>
+<p>But notice:</p>
+<ul>
+<li>Shared data is accessed directly from <code>context.scene</code>.</li>
+<li>Operators assume a specific storage location.</li>
+<li>Logic and UI are tightly coupled.</li>
+<li>Extending this structure requires repetition.</li>
+</ul>
+<p>There is no clear ownership boundary.</p>
+<hr>
+<h2 id="step-1--separate-ownership"><a class="header" href="#step-1--separate-ownership">Step 1 – Separate Ownership</a></h2>
+<p>First, formalize storage ownership.</p>
+<p>Define a property group:</p>
+<pre><code class="language-python id=&quot;ukq8ng&quot;">class AudioHostProps(bpy.types.PropertyGroup):
+    audio_path: bpy.props.StringProperty(subtype="FILE_PATH")
+    bitrate: bpy.props.IntProperty(default=192)
+</code></pre>
+<p>Register it:</p>
+<pre><code class="language-python id=&quot;odqahb&quot;">bpy.types.Scene.audio_host = bpy.props.PointerProperty(
+    type=AudioHostProps
+)
+</code></pre>
+<p>Now storage is explicit.</p>
+<p>Instead of scattering values across <code>context.scene</code>, we centralize them.</p>
+<hr>
+<h2 id="step-2--extract-tool-logic"><a class="header" href="#step-2--extract-tool-logic">Step 2 – Extract Tool Logic</a></h2>
+<p>Instead of embedding logic directly inside operators, extract the functional core:</p>
+<pre><code class="language-python id=&quot;x8qazn&quot;">def encode_audio(audio_path, bitrate):
+    print("Encoding:", audio_path, bitrate)
+
+
+def render_audio(audio_path):
+    print("Rendering:", audio_path)
+</code></pre>
+<p>Now logic is reusable and independent of Blender.</p>
+<p>Operators become thin wrappers.</p>
+<hr>
+<h2 id="step-3--convert-tools-into-plugins"><a class="header" href="#step-3--convert-tools-into-plugins">Step 3 – Convert Tools into Plugins</a></h2>
+<p>Now these functions can become QuickAddon plugins.</p>
+<p>They declare shared keys:</p>
+<pre><code class="language-python id=&quot;ckd9l5&quot;">@op(
+    shared={
+        "audio_path": "project.audio_path",
+        "bitrate": "project.bitrate",
+    }
+)
+def encode_audio(audio_path: Path, bitrate: int):
+    ...
+</code></pre>
+<p>And:</p>
+<pre><code class="language-python id=&quot;l1znf2&quot;">@op(
+    shared={
+        "audio_path": "project.audio_path",
+    }
+)
+def render_audio(audio_path: Path):
+    ...
+</code></pre>
+<p>Important contract:</p>
+<ul>
+<li><code>audio_path: Path</code> means the generated wrapper passes a real <code>Path</code> object to
+plugin code</li>
+<li>if a host/plugin author wants Blender filepath UI but needs a plain string,
+they should use <code>audio_path: str</code> plus
+<code>param_subtypes={"audio_path": "FILE_PATH"}</code></li>
+</ul>
+<p>Generate them as plugins.</p>
+<p>These plugins:</p>
+<ul>
+<li>Do not know where storage lives.</li>
+<li>Do not assume <code>context.scene</code>.</li>
+<li>Declare only their shared contracts.</li>
+</ul>
+<hr>
+<h2 id="step-4--turn-the-existing-add-on-into-a-host"><a class="header" href="#step-4--turn-the-existing-add-on-into-a-host">Step 4 – Turn the Existing Add-on into a Host</a></h2>
+<p>Your original add-on becomes:</p>
+<ul>
+<li>UI owner</li>
+<li>Property owner</li>
+<li>Orchestrator</li>
+</ul>
+<p>It embeds the generated plugins.</p>
+<p>It defines:</p>
+<ul>
+<li><code>KEYMAP</code></li>
+<li><code>HostAPI</code></li>
+<li>Optional orchestration logic</li>
+</ul>
+<p>The structure becomes:</p>
+<pre><code class="language-text id=&quot;wev0xa&quot;">audio_host/
+├── __init__.py
+├── encode_plugin/
+└── render_plugin/
+</code></pre>
+<p>The host controls routing.</p>
+<p>The plugins remain modular.</p>
+<hr>
+<h2 id="what-changed-1"><a class="header" href="#what-changed-1">What Changed?</a></h2>
+<p>Before:</p>
+<ul>
+<li>Operators directly accessed scene properties.</li>
+<li>Storage was implicit.</li>
+<li>Logic and UI were tightly coupled.</li>
+</ul>
+<p>After:</p>
+<ul>
+<li>Host owns storage.</li>
+<li>Plugins declare shared keys.</li>
+<li>Routing is centralized.</li>
+<li>Logic is modular.</li>
+<li>The system becomes composable.</li>
+</ul>
+<hr>
+<h2 id="what-did-not-change-1"><a class="header" href="#what-did-not-change-1">What Did Not Change?</a></h2>
+<ul>
+<li>The core encode logic.</li>
+<li>The core render logic.</li>
+<li>The UI intent.</li>
+<li>The user workflow.</li>
+</ul>
+<p>We changed structure, not behavior.</p>
+<hr>
+<h2 id="the-result"><a class="header" href="#the-result">The Result</a></h2>
+<p>Your existing add-on:</p>
+<ul>
+<li>Becomes cleaner.</li>
+<li>Gains composability.</li>
+<li>Gains embeddable plugins.</li>
+<li>Gains routing discipline.</li>
+<li>Gains orchestration capability.</li>
+</ul>
+<p>And it did not require rewriting everything from scratch.</p>
+<p>In the next chapter, we go the other direction:</p>
+<p>Refactoring an existing add-on into a reusable plugin.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="refactoring-existing-addon-into-plugin"><a class="header" href="#refactoring-existing-addon-into-plugin">Refactoring Existing Addon into Plugin</a></h1>
+<p>In the previous chapter, we refactored an existing add-on into a host.</p>
+<p>Now we take the opposite direction.</p>
+<p>Instead of turning a legacy add-on into a host,
+we turn it into a reusable plugin.</p>
+<p>The goal is composability.</p>
+<hr>
+<h2 id="the-starting-point-1"><a class="header" href="#the-starting-point-1">The Starting Point</a></h2>
+<p>Consider a typical legacy operator:</p>
+<pre><code class="language-python id=&quot;lf4p90&quot;">class AUDIO_OT_normalize(bpy.types.Operator):
+    bl_idname = "audio.normalize"
+    bl_label = "Normalize Audio"
+
+    def execute(self, context):
+        audio_path = context.scene.audio_path
+        threshold = context.scene.threshold
+        print("Normalizing:", audio_path, threshold)
+        return {'FINISHED'}
+</code></pre>
+<p>This works.</p>
+<p>But it assumes:</p>
+<ul>
+<li>Properties live directly on <code>context.scene</code>.</li>
+<li>Storage location is fixed.</li>
+<li>UI and logic are tightly coupled.</li>
+</ul>
+<p>It cannot be embedded cleanly into another host.</p>
+<hr>
+<h2 id="step-1--extract-the-core-logic"><a class="header" href="#step-1--extract-the-core-logic">Step 1 – Extract the Core Logic</a></h2>
+<p>Separate execution from Blender context:</p>
+<pre><code class="language-python id=&quot;fnyq4p&quot;">def normalize_audio(audio_path, threshold):
+    print("Normalizing:", audio_path, threshold)
+</code></pre>
+<p>Now the function is pure.</p>
+<p>It no longer depends on <code>context</code>.</p>
+<p>The Blender-specific layer becomes a wrapper, not the core.</p>
+<hr>
+<h2 id="step-2--declare-shared-keys"><a class="header" href="#step-2--declare-shared-keys">Step 2 – Declare Shared Keys</a></h2>
+<p>Instead of directly accessing scene properties,
+declare shared inputs explicitly:</p>
+<pre><code class="language-python id=&quot;6o3s6g&quot;">@op(
+    label="Normalize Audio",
+    space="SEQUENCE_EDITOR",
+    category="Audio",
+    shared={
+        "audio_path": "project.audio_path",
+        "threshold": "project.threshold",
+    },
+)
+def normalize_audio(
+    audio_path: Path,
+    threshold: float = -1.0,
+):
+    print("Normalizing:", audio_path, threshold)
+</code></pre>
+<p>This does three things:</p>
+<ul>
+<li>Removes direct scene coupling.</li>
+<li>Declares the input contract explicitly.</li>
+<li>Makes the tool host-agnostic.</li>
+</ul>
+<p>The function now speaks in shared keys, not storage paths.</p>
+<hr>
+<h2 id="step-3--generate-the-plugin"><a class="header" href="#step-3--generate-the-plugin">Step 3 – Generate the Plugin</a></h2>
+<p>Run:</p>
+<pre><code class="language-bash id=&quot;6dfz3v&quot;">quickaddon build normalize.py
+</code></pre>
+<p>You now have:</p>
+<pre><code class="language-text id=&quot;1c3g5s&quot;">normalize_plugin/
+├── __init__.py
+└── generated_ops.py
+</code></pre>
+<p>This plugin:</p>
+<ul>
+<li>Declares shared keys.</li>
+<li>Supports fallback storage.</li>
+<li>Can run standalone.</li>
+<li>Can be embedded into any host.</li>
+</ul>
+<p>No assumptions about storage are embedded in it.</p>
+<hr>
+<h2 id="what-changed-2"><a class="header" href="#what-changed-2">What Changed?</a></h2>
+<p>Before:</p>
+<ul>
+<li>The operator assumed a storage location.</li>
+<li>It could not be embedded cleanly.</li>
+<li>Logic was tied to a specific add-on.</li>
+</ul>
+<p>After:</p>
+<ul>
+<li>Logic is pure.</li>
+<li>Inputs are declarative.</li>
+<li>Storage is routed by the host.</li>
+<li>The plugin is reusable.</li>
+</ul>
+<hr>
+<h2 id="what-did-not-change-2"><a class="header" href="#what-did-not-change-2">What Did Not Change?</a></h2>
+<ul>
+<li>The normalization logic.</li>
+<li>The UI label.</li>
+<li>The intended workflow.</li>
+<li>The operator behavior.</li>
+</ul>
+<p>Only the structure changed.</p>
+<hr>
+<h2 id="the-composability-test"><a class="header" href="#the-composability-test">The Composability Test</a></h2>
+<p>If a tool can:</p>
+<ul>
+<li>Declare shared keys.</li>
+<li>Avoid direct context access.</li>
+<li>Avoid owning storage.</li>
+</ul>
+<p>Then it is a proper plugin.</p>
+<p>Plugins should not:</p>
+<ul>
+<li>Decide where data lives.</li>
+<li>Perform orchestration.</li>
+<li>Assume execution order.</li>
+</ul>
+<p>Those responsibilities belong to the host.</p>
+<hr>
+<h2 id="the-architectural-symmetry"><a class="header" href="#the-architectural-symmetry">The Architectural Symmetry</a></h2>
+<p>Chapter 11:</p>
+<p>Existing add-on → Host</p>
+<p>Chapter 12:</p>
+<p>Existing add-on → Plugin</p>
+<p>Together, these chapters define the system boundary.</p>
+<p>Hosts own:</p>
+<ul>
+<li>UI composition</li>
+<li>Shared storage</li>
+<li>Orchestration</li>
+<li>Constraint validation</li>
+</ul>
+<p>Plugins own:</p>
+<ul>
+<li>Tool logic</li>
+<li>Input declaration</li>
+<li>Stateless execution</li>
+</ul>
+<p>That separation is the foundation of composability.</p>
+<hr>
+<h2 id="where-you-are-now"><a class="header" href="#where-you-are-now">Where You Are Now</a></h2>
+<p>You have seen:</p>
+<ul>
+<li>Scripts turned into tools</li>
+<li>Tools turned into plugins</li>
+<li>Plugins embedded into hosts</li>
+<li>Hosts managing routing</li>
+<li>Hosts coordinating execution</li>
+<li>Legacy add-ons refactored in both directions</li>
+</ul>
+<p>You now understand the full architectural loop.</p>
+<p>The rest is composition.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="the-long-task-contract"><a class="header" href="#the-long-task-contract">The Long Task Contract</a></h1>
+<p>In Chapter 10, we introduced cooperative long-running tasks.</p>
+<p>In this chapter, we define the contract precisely.</p>
+<p>This is not an implementation detail.
+It is an execution model.</p>
+<hr>
+<h2 id="why-the-contract-exists"><a class="header" href="#why-the-contract-exists">Why the Contract Exists</a></h2>
+<p>Blender operators execute on the main thread.</p>
+<p>If a function performs long-running work in a single call:</p>
+<ul>
+<li>The UI freezes</li>
+<li>The user cannot cancel</li>
+<li>Progress is invisible</li>
+<li>Blender appears unstable</li>
+</ul>
+<p>The long task contract solves this by enforcing cooperative execution.</p>
+<hr>
+<h2 id="declaring-a-long-task-1"><a class="header" href="#declaring-a-long-task-1">Declaring a Long Task</a></h2>
+<p>A plugin declares:</p>
+<pre><code class="language-python id=&quot;m5vyd0&quot;">@op(
+    label="Process Frames",
+    long_task=True,
+)
+def process_frames(...):
+    ...
+</code></pre>
+<p>If <code>long_task=True</code>, the function must follow the long task contract.</p>
+<hr>
+<h2 id="strict-conformance"><a class="header" href="#strict-conformance">Strict Conformance</a></h2>
+<p>If <code>long_task=True</code> is declared:</p>
+<ul>
+<li>The function must be a <a href="https://wiki.python.org/moin/Generators">python generator</a>.</li>
+<li>The generator must yield at least once.</li>
+</ul>
+<p>If the function:</p>
+<ul>
+<li>Does not contain <code>yield</code></li>
+<li>Returns normally without yielding</li>
+<li>Raises <code>StopIteration</code> immediately</li>
+</ul>
+<p>The build must fail.</p>
+<p>QuickAddon enforces this at build time.</p>
+<p>Long tasks are not optional behavior.
+They are a contract.</p>
+<p>Strict conformance guarantees:</p>
+<ul>
+<li>Non-blocking execution</li>
+<li>Predictable scheduling</li>
+<li>Safe cancellation</li>
+<li>Stable host control</li>
+</ul>
+<hr>
+<h2 id="the-core-rule"><a class="header" href="#the-core-rule">The Core Rule</a></h2>
+<p>A long task must:</p>
+<blockquote>
+<p>Perform incremental work and yield control back to the host after each step.</p>
+</blockquote>
+<p>It must not block until completion.</p>
+<hr>
+<h2 id="required-execution-model"><a class="header" href="#required-execution-model">Required Execution Model</a></h2>
+<p>A long task function must behave as a generator.</p>
+<p>Conceptually:</p>
+<pre><code class="language-python id=&quot;rcmp8h&quot;">def process_frames(...):
+    total = compute_total()
+
+    for i in range(total):
+        do_one_unit_of_work(i)
+
+        yield {
+            "progress": i,
+            "total": total,
+        }
+</code></pre>
+<p>The function:</p>
+<ul>
+<li>Executes a small unit of work</li>
+<li>Yields a progress payload</li>
+<li>Allows the host to resume later</li>
+</ul>
+<p>It does not run to completion in a single call.</p>
+<hr>
+<h2 id="yield-payload"><a class="header" href="#yield-payload">Yield Payload</a></h2>
+<p>Each yield must return a dictionary.</p>
+<p>Minimum required fields:</p>
+<pre><code class="language-text id=&quot;c9f03x&quot;">progress
+total
+</code></pre>
+<p>Optional fields:</p>
+<pre><code class="language-text id=&quot;pp6zpo&quot;">message
+</code></pre>
+<p>Example:</p>
+<pre><code class="language-python id=&quot;ndzmyb&quot;">yield {
+    "progress": i,
+    "total": total,
+    "message": f"Processing frame {i}",
+}
+</code></pre>
+<p>The host uses this data to:</p>
+<ul>
+<li>Update the progress bar</li>
+<li>Display status messages</li>
+<li>Determine completion</li>
+</ul>
+<hr>
+<h2 id="completion"><a class="header" href="#completion">Completion</a></h2>
+<p>When the generator finishes:</p>
+<ul>
+<li>The task is considered complete.</li>
+<li>The host performs cleanup.</li>
+<li>Progress UI closes.</li>
+<li>Execution returns <code>FINISHED</code>.</li>
+</ul>
+<hr>
+<h2 id="cancellation"><a class="header" href="#cancellation">Cancellation</a></h2>
+<p>The host must provide an explicit cancellation mechanism.</p>
+<p>Recommended UI model:</p>
+<ul>
+<li>Status bar progress indicator</li>
+<li>Visible cancel button (“X”)</li>
+<li>ESC key support only while modal operator owns execution</li>
+</ul>
+<p>When cancellation is triggered:</p>
+<ul>
+<li>Host stops calling <code>next()</code></li>
+<li>Generator is discarded</li>
+<li>Progress UI closes</li>
+<li>Operator returns <code>CANCELLED</code></li>
+</ul>
+<p>Cancellation must be:</p>
+<ul>
+<li>Explicit</li>
+<li>Predictable</li>
+<li>Scope-aware (v2)</li>
+<li>Safe</li>
+</ul>
+<p>Plugins must not rely on guaranteed completion.</p>
+<p>They must tolerate interruption at any yield boundary.</p>
+<h2 id="error-handling"><a class="header" href="#error-handling">Error Handling</a></h2>
+<p>If a long task generator raises an exception:</p>
+<ul>
+<li>The host must stop execution.</li>
+<li>Progress UI must close.</li>
+<li>The error must be reported via Blender operator report.</li>
+</ul>
+<p>If a yield payload:</p>
+<ul>
+<li>Is not a dictionary</li>
+<li>Omits required fields</li>
+<li>Contains invalid values</li>
+</ul>
+<p>The host must:</p>
+<ul>
+<li>Cancel execution</li>
+<li>Report a contract violation</li>
+</ul>
+<p>The long task contract is enforced at runtime as well as at build time.</p>
+<hr>
+<h2 id="host-responsibilities"><a class="header" href="#host-responsibilities">Host Responsibilities</a></h2>
+<p>The host must:</p>
+<ul>
+<li>Detect <code>long_task=True</code></li>
+<li>Wrap execution in a modal operator</li>
+<li>Schedule incremental <code>next()</code> calls</li>
+<li>Update progress display</li>
+<li>Provide cancellation</li>
+<li>Ensure scope isolation (if scoped)</li>
+</ul>
+<p>The host owns scheduling.</p>
+<p>Plugins must not implement modal logic directly.</p>
+<hr>
+<h2 id="interaction-with-scoped-instances"><a class="header" href="#interaction-with-scoped-instances">Interaction with Scoped Instances</a></h2>
+<p>If HostAPI v2 is used:</p>
+<ul>
+<li>Each scope maintains its own long-task state.</li>
+<li>Progress and cancellation apply only to that scope.</li>
+<li>Multiple scoped instances may run independently.</li>
+</ul>
+<p>Isolation must be enforced at the host level.</p>
+<hr>
+<h2 id="forbidden-patterns"><a class="header" href="#forbidden-patterns">Forbidden Patterns</a></h2>
+<p>A long task must not:</p>
+<ul>
+<li>Execute blocking loops without yielding</li>
+<li>Spawn uncontrolled threads</li>
+<li>Access scene storage directly</li>
+<li>Assume uninterrupted execution</li>
+<li>Manipulate modal handlers directly</li>
+</ul>
+<p>The contract enforces discipline.</p>
+<hr>
+<h2 id="short-tasks-vs-long-tasks"><a class="header" href="#short-tasks-vs-long-tasks">Short Tasks vs Long Tasks</a></h2>
+<p>Short task:</p>
+<pre><code class="language-python id=&quot;z2l0ot&quot;">@op(...)
+def simple_task(...):
+    perform_all_work()
+</code></pre>
+<p>Long task:</p>
+<pre><code class="language-python id=&quot;b2b3q9&quot;">@op(long_task=True)
+def incremental_task(...):
+    yield ...
+</code></pre>
+<p>The decorator determines the execution strategy.</p>
+<hr>
+<h2 id="why-this-matters-2"><a class="header" href="#why-this-matters-2">Why This Matters</a></h2>
+<p>The long task contract provides:</p>
+<ul>
+<li>Non-blocking UI</li>
+<li>Visible progress</li>
+<li>Safe cancellation</li>
+<li>Predictable lifecycle</li>
+<li>Stable host-controlled execution</li>
+</ul>
+<p>It allows complex processing without destabilizing Blender.
+In chapter 15 we will expand further we examine how the generator implements this model internally.</p>
+<p>In the next chapter, we will examine how the HostAPI paradigm can be used for more complex need.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="scoped-instances-and-nested-composition"><a class="header" href="#scoped-instances-and-nested-composition">Scoped Instances and Nested Composition</a></h1>
+<p>Up to this point, every embedded plugin instance has assumed a single storage domain.</p>
+<p>That works for:</p>
+<ul>
+<li>Simple add-ons</li>
+<li>Single-instance tools</li>
+<li>Linear workflows</li>
+</ul>
+<p>But it limits composition.</p>
+<p>What happens if:</p>
+<ul>
+<li>You embed the same plugin twice?</li>
+<li>You want two encoders with different settings?</li>
+<li>A host embeds another host?</li>
+<li>You build nested systems?</li>
+</ul>
+<p>Static storage resolution breaks down.</p>
+<p>We need instance isolation.</p>
+<p>Earlier, in Chapter 9, we hinted at a more scalable routing model.
+We now extend that idea into scoped composition.</p>
+<hr>
+<h2 id="the-limitation-of-static-storage"><a class="header" href="#the-limitation-of-static-storage">The Limitation of Static Storage</a></h2>
+<p>In the single-instance model:</p>
+<pre><code class="language-text">shared_key → KEYMAP → Scene.some_pointer.some_attr
+</code></pre>
+<p>All plugin instances share the same storage location.</p>
+<p>This prevents:</p>
+<ul>
+<li>Multiple independent instances</li>
+<li>Nested hosts</li>
+<li>Scoped isolation</li>
+</ul>
+<p>To unlock composition, storage must become scoped.</p>
+<hr>
+<h2 id="introducing-scope"><a class="header" href="#introducing-scope">Introducing Scope</a></h2>
+<p>A <strong>scope</strong> represents one logical instance of a plugin inside a host.</p>
+<p>Instead of resolving shared values globally:</p>
+<pre><code class="language-text">key → value
+</code></pre>
+<p>We now resolve:</p>
+<pre><code class="language-text">(scope, key) → value
+</code></pre>
+<p>Each mounted plugin instance receives its own scope.</p>
+<p>Scope is allocated and owned by the host.</p>
+<hr>
+<h2 id="binding-a-scope-for-a-mounted-instance"><a class="header" href="#binding-a-scope-for-a-mounted-instance">Binding a Scope for a Mounted Instance</a></h2>
+<p>HostAPI v2 introduces:</p>
+<pre><code class="language-python">host_api.bind(context, instance_hint=None)
+</code></pre>
+<p>During hosted runtime execution for a mounted instance:</p>
+<ol>
+<li>The host/runtime allocates or selects a scope.</li>
+<li>A new HostAPI bound to that scope is returned.</li>
+<li>All shared resolution occurs within that scope.</li>
+</ol>
+<p>Plugins do not manage scope.</p>
+<p>Hosts do.</p>
+<hr>
+<h2 id="what-changes-for-plugins"><a class="header" href="#what-changes-for-plugins">What Changes for Plugins?</a></h2>
+<p>Nothing in the tool source.</p>
+<p>The generator ensures:</p>
+<ul>
+<li>Shared keys remain declarative.</li>
+<li><code>get()</code> and <code>draw()</code> operate through the bound API.</li>
+<li>Plugins remain unaware of storage paths.</li>
+</ul>
+<p>The change is architectural, not behavioral.</p>
+<hr>
+<h2 id="scoped-keymap"><a class="header" href="#scoped-keymap">Scoped KEYMAP</a></h2>
+<p>Routing must now consider scope.</p>
+<p>Conceptually:</p>
+<pre><code class="language-text">(scope, key) → host-owned property
+</code></pre>
+<p>If no host-owned mapping exists:</p>
+<ul>
+<li>Scoped fallback storage is used.</li>
+</ul>
+<p>Each plugin instance is isolated unless the host explicitly routes keys together.</p>
+<p>HostAPI v2 enables the scalable routing model we anticipated earlier.</p>
+<hr>
+<h2 id="nested-composition"><a class="header" href="#nested-composition">Nested Composition</a></h2>
+<p>Scopes make nested composition possible.</p>
+<p>Example:</p>
+<ul>
+<li>Host A embeds Host B.</li>
+<li>Host A mounts a root instance.</li>
+<li>Host-owned storage remains the ground.</li>
+<li>Child systems may later mount child instances on top of the same scoped model.</li>
+</ul>
+<p>Each layer isolates its instances.</p>
+<p>No collisions.
+No implicit sharing.
+No accidental overwrites.</p>
+<p>Composition becomes predictable.</p>
+<hr>
+<h2 id="storage-backend"><a class="header" href="#storage-backend">Storage Backend</a></h2>
+<p>Scoped storage must not rely on dynamic RNA property creation.</p>
+<p>Recommended fallback backend:</p>
+<pre><code class="language-text">scene["qa_scope:&lt;scope_id&gt;:&lt;fallback_prop&gt;"]
+</code></pre>
+<p>Hosts may still route specific keys to typed <code>PropertyGroup</code>s.</p>
+<p>Fallback storage, however, must remain dynamic and scope-aware.</p>
+<hr>
+<h2 id="multi-instance-example"><a class="header" href="#multi-instance-example">Multi-Instance Example</a></h2>
+<p>Imagine embedding the same plugin twice:</p>
+<pre><code class="language-text">audiodeck/
+├── encoder_A
+└── encoder_B
+</code></pre>
+<p>Each registration calls <code>bind()</code>.</p>
+<p>Each receives a unique scope.</p>
+<p>Each has independent values for:</p>
+<ul>
+<li><code>project.audio_path</code></li>
+<li><code>project.bitrate</code></li>
+<li><code>project.output_dir</code></li>
+</ul>
+<p>They do not interfere with one another.</p>
+<hr>
+<h2 id="responsibility-boundaries"><a class="header" href="#responsibility-boundaries">Responsibility Boundaries</a></h2>
+<p>Plugins:</p>
+<ul>
+<li>Declare shared keys</li>
+<li>Remain stateless across scopes</li>
+<li>Do not access scene storage directly</li>
+</ul>
+<p>Hosts:</p>
+<ul>
+<li>Allocate scopes</li>
+<li>Own scoped storage</li>
+<li>Maintain scope-aware routing</li>
+<li>Decide when scopes intentionally share values</li>
+</ul>
+<p>Isolation is a host responsibility.</p>
+<hr>
+<h2 id="when-should-you-use-scoped-instances"><a class="header" href="#when-should-you-use-scoped-instances">When Should You Use Scoped Instances?</a></h2>
+<p>Scoped instances are necessary when:</p>
+<ul>
+<li>A plugin may appear multiple times</li>
+<li>Nested composition is required</li>
+<li>Isolation is critical</li>
+<li>Complex systems are being built</li>
+</ul>
+<p>Simple add-ons may not need it.</p>
+<p>QuickAddon supports both models.</p>
+<p>Scoped instances transform QuickAddon from:</p>
+<p>an add-on generator</p>
+<p>into</p>
+<p>a composable UI architecture framework.</p>
+<p>At this point, you may want to review the formal specification:
+<a href="#quickaddon-hostapi-v2-spec">HostAPI V2 Spec</a>.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="internal-execution-model"><a class="header" href="#internal-execution-model">Internal Execution Model</a></h1>
+<p>Up to this point, you have seen:</p>
+<ul>
+<li>How plugins are declared.</li>
+<li>How shared keys are routed.</li>
+<li>How long tasks are enforced.</li>
+<li>How HostAPI v1 and v2 separate storage ownership.</li>
+</ul>
+<p>Now we step inside the system.</p>
+<p>This chapter explains what actually happens when a user clicks a button.</p>
+<h2 id="the-three-phases-of-execution"><a class="header" href="#the-three-phases-of-execution">The Three Phases of Execution</a></h2>
+<p>Every QuickAddon tool goes through three distinct phases:</p>
+<ol>
+<li>Build-time compilation</li>
+<li>Registration-time binding</li>
+<li>Runtime execution</li>
+</ol>
+<p>Understanding these phases clarifies every design decision.</p>
+<h2 id="phase-1--build-time-compilation"><a class="header" href="#phase-1--build-time-compilation">Phase 1 – Build-Time Compilation</a></h2>
+<p>When you run:</p>
+<pre><code>
+quickaddon build my_tool.py
+
+</code></pre>
+<p>QuickAddon performs:</p>
+<ol>
+<li>Module loading</li>
+<li>Decorator extraction</li>
+<li>Structural validation</li>
+<li>Contract validation (QA10)</li>
+<li>Render model construction</li>
+<li>Template emission</li>
+</ol>
+<p>The source file is not executed inside Blender.</p>
+<p>It is compiled into a structural add-on module.</p>
+<p>At this stage:</p>
+<ul>
+<li>Shared keys are registered.</li>
+<li>Types are verified.</li>
+<li>long_task contracts are enforced.</li>
+<li>No Blender API calls occur.</li>
+</ul>
+<p>Build-time is deterministic.</p>
+<p>If it succeeds, the add-on structure is valid.</p>
+<h2 id="phase-2--registration-time-binding"><a class="header" href="#phase-2--registration-time-binding">Phase 2 – Registration-Time Binding</a></h2>
+<p>When Blender enables the add-on:</p>
+<ul>
+<li>Classes are registered.</li>
+<li>PropertyGroups are created.</li>
+<li>HostAPI is injected.</li>
+</ul>
+<p>In v1:</p>
+<ul>
+<li>A fallback HostAPI is used if none is injected.</li>
+</ul>
+<p>In v2:</p>
+<ul>
+<li>A named instance is mounted explicitly.</li>
+<li>The runtime binds a scope for that mounted instance.</li>
+<li>A bound HostAPI instance is used internally.</li>
+<li>All shared routing resolves through the bound API.</li>
+</ul>
+<p>Registration does not execute tool logic.</p>
+<p>It prepares execution boundaries.</p>
+<h2 id="phase-3--runtime-execution"><a class="header" href="#phase-3--runtime-execution">Phase 3 – Runtime Execution</a></h2>
+<p>When a user clicks a tool button:</p>
+<p>Blender invokes the generated Operator.</p>
+<p>The operator:</p>
+<ol>
+<li>Collects local parameters (if any)</li>
+<li>Resolves shared values via HostAPI</li>
+<li>Calls the user function</li>
+</ol>
+<p>At this point execution diverges:</p>
+<ul>
+<li>Short task</li>
+<li>Long task</li>
+</ul>
+<h2 id="short-task-execution-path"><a class="header" href="#short-task-execution-path">Short Task Execution Path</a></h2>
+<p>For short tasks:</p>
+<pre><code class="language-python">fn(...)
+return {'FINISHED'}
+</code></pre>
+<p>The function runs immediately.</p>
+<p>If an exception occurs:</p>
+<ul>
+<li>The operator reports the error.</li>
+<li>Execution returns <code>CANCELLED</code>.</li>
+</ul>
+<p>Short tasks are synchronous and simple.</p>
+<h2 id="long-task-execution-path"><a class="header" href="#long-task-execution-path">Long Task Execution Path</a></h2>
+<p>If <code>long_task=True</code>:</p>
+<p>Execution becomes cooperative.</p>
+<p>The operator:</p>
+<ol>
+<li>Calls the user function.</li>
+<li>Verifies that a generator was returned (QA20).</li>
+<li>Starts a modal timer.</li>
+<li>Schedules incremental execution.</li>
+</ol>
+<p>Instead of running to completion:</p>
+<pre><code class="language-text">User Click
+    ↓
+Operator.invoke()
+    ↓
+Start generator
+    ↓
+Modal loop
+    ↓
+next(generator)
+    ↓
+Yield progress
+    ↓
+Repeat until StopIteration
+</code></pre>
+<p>Each <code>yield</code> returns control to Blender.</p>
+<p>The UI remains responsive.</p>
+<h2 id="modal-scheduler-model"><a class="header" href="#modal-scheduler-model">Modal Scheduler Model</a></h2>
+<p>The long task operator owns:</p>
+<ul>
+<li>Timer creation</li>
+<li>Modal handler registration</li>
+<li>Progress bar lifecycle</li>
+<li>Generator advancement</li>
+<li>Cleanup on completion or cancellation</li>
+</ul>
+<p>The plugin never touches:</p>
+<ul>
+<li>Timers</li>
+<li>Modal handlers</li>
+<li>Progress API</li>
+</ul>
+<p>This separation guarantees stability.</p>
+<h2 id="runtime-contract-enforcement-qa20"><a class="header" href="#runtime-contract-enforcement-qa20">Runtime Contract Enforcement (QA20)</a></h2>
+<p>During modal execution:</p>
+<p>Each yield payload is validated:</p>
+<ul>
+<li>Must be dict</li>
+<li>Must contain <code>progress</code></li>
+<li>Must contain <code>total</code></li>
+</ul>
+<p>If validation fails:</p>
+<ul>
+<li>Execution stops</li>
+<li>Progress UI closes</li>
+<li>Error is reported</li>
+<li>Operator returns <code>CANCELLED</code></li>
+</ul>
+<p>Contracts are enforced at runtime to prevent silent corruption.</p>
+<h2 id="cancellation-behavior"><a class="header" href="#cancellation-behavior">Cancellation Behavior</a></h2>
+<p>If the user cancels:</p>
+<ul>
+<li>The modal loop stops.</li>
+<li>The generator is discarded.</li>
+<li>Progress UI closes.</li>
+<li>Operator returns <code>CANCELLED</code>.</li>
+</ul>
+<p>The generator must tolerate interruption.</p>
+<p>Completion is not guaranteed.</p>
+<h2 id="native-blender-parity"><a class="header" href="#native-blender-parity">Native Blender Parity</a></h2>
+<p>QuickAddon long tasks intentionally mirror Blender’s
+“Render Animation” execution model.</p>
+<p>Characteristics:</p>
+<ul>
+<li>Modal timer-driven execution</li>
+<li>Progress displayed in status area</li>
+<li>Visible cancel control</li>
+<li>ESC cancels only while render is active</li>
+<li>UI remains stable</li>
+</ul>
+<p>This alignment ensures:</p>
+<ul>
+<li>Native user expectations</li>
+<li>Predictable cancellation</li>
+<li>Familiar interaction patterns</li>
+<li>Professional integration into Blender workflows</li>
+</ul>
+<h2 id="scoped-execution-v2"><a class="header" href="#scoped-execution-v2">Scoped Execution (v2)</a></h2>
+<p>In v2:</p>
+<p>Each plugin instance is bound to a scope.</p>
+<p>All shared value resolution happens through:</p>
+<pre><code class="language-text">(scope, key) → value
+</code></pre>
+<p>Long tasks remain isolated per scope.</p>
+<p>Multiple instances may run independently.</p>
+<p>Isolation is enforced at the HostAPI level.</p>
+<h2 id="no-threads-no-background-workers"><a class="header" href="#no-threads-no-background-workers">No Threads, No Background Workers</a></h2>
+<p>QuickAddon intentionally does not use:</p>
+<ul>
+<li>Threads</li>
+<li>Background tasks</li>
+<li>Async execution</li>
+</ul>
+<p>Why?</p>
+<p>Blender’s Python environment is single-threaded for UI safety.</p>
+<p>Cooperative scheduling preserves:</p>
+<ul>
+<li>Stability</li>
+<li>Predictability</li>
+<li>Debuggability</li>
+</ul>
+<p>The generator model is sufficient.</p>
+<h2 id="determinism-guarantees"><a class="header" href="#determinism-guarantees">Determinism Guarantees</a></h2>
+<p>The execution model guarantees:</p>
+<ul>
+<li>Build-time structural correctness</li>
+<li>Registration-time binding clarity</li>
+<li>Runtime contract enforcement</li>
+<li>No hidden shared state</li>
+<li>No dynamic introspection</li>
+</ul>
+<p>Execution is explicit at every layer.</p>
+<h2 id="why-this-model-exists"><a class="header" href="#why-this-model-exists">Why This Model Exists</a></h2>
+<p>The internal execution model enforces:</p>
+<ul>
+<li>Separation of structure and behavior</li>
+<li>Host-controlled lifecycle</li>
+<li>Plugin-declared intent</li>
+<li>Deterministic routing</li>
+<li>Safe incremental processing</li>
+</ul>
+<p>Without this model:</p>
+<ul>
+<li>Long tasks freeze Blender</li>
+<li>Nested composition breaks</li>
+<li>State leaks between instances</li>
+<li>Bugs become nondeterministic</li>
+</ul>
+<p>The model is strict because Blender is strict.</p>
+<h2 id="what-you-now-understand"><a class="header" href="#what-you-now-understand">What You Now Understand</a></h2>
+<p>When you click a button:</p>
+<p>You are not running a script.</p>
+<p>You are entering a controlled execution pipeline:</p>
+<ul>
+<li>Validated</li>
+<li>Routed</li>
+<li>Bound</li>
+<li>Scheduled</li>
+<li>Enforced</li>
+</ul>
+<p>QuickAddon is not merely generating operators.</p>
+<p>It is generating execution boundaries.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="composition-over-convenience"><a class="header" href="#composition-over-convenience">Composition Over Convenience</a></h1>
+<p>You began with a simple problem.
+How do I turn a Python function into a Blender add-on?
+Along the way, you built something larger.
+You learned:</p>
+<ul>
+<li>How to declare tools instead of writing operators by hand.</li>
+<li>How to separate UI from logic.</li>
+<li>How to separate storage ownership from tool behavior.</li>
+<li>How to route shared data through a contract.</li>
+<li>How to compose multiple plugins into a host.</li>
+<li>How to isolate instances with scopes.</li>
+<li>How to execute long-running tasks without freezing Blender.</li>
+<li>How to enforce architectural discipline at build time.</li>
+</ul>
+<p>QuickAddon is not a macro generator.
+It is not a shortcut.
+It is a structure.
+The structure enforces:</p>
+<ul>
+<li>Explicit ownership</li>
+<li>Declarative inputs</li>
+<li>Predictable routing</li>
+<li>Controlled execution</li>
+<li>Safe composition</li>
+</ul>
+<p>You may never need multi-instance scoped hosts.
+You may never embed a host inside another host.
+You may never declare a long task.
+That is fine.
+The architecture scales down as cleanly as it scales up.
+The point is not complexity.
+The point is boundaries.
+When boundaries are clear:</p>
+<ul>
+<li>Systems remain stable.</li>
+<li>Growth remains controlled.</li>
+<li>Refactoring becomes possible.</li>
+<li>Composition becomes natural.</li>
+</ul>
+<p>You now understand the full loop:</p>
+<p>Script<br>→ Tool<br>→ Plugin<br>→ Host<br>→ System</p>
+<p>Everything beyond this point is composition.
+Build what you need.
+Refactor when structure demands it.
+Generate when discipline permits it.</p>
+<p>Own your boundaries.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="decorator-reference"><a class="header" href="#decorator-reference">Decorator Reference</a></h1>
+<p>This page documents the user-facing <code>@op(...)</code> contract.</p>
+<p>It is a reference page, not a teaching chapter.</p>
+<p>Use it when you need the current supported decorator surface in one place.</p>
+<hr>
+<h2 id="basic-shape"><a class="header" href="#basic-shape">Basic Shape</a></h2>
+<pre><code class="language-python">@op(
+    label="Setup From Audio",
+    category="QuickAddon",
+    space="SEQUENCE_EDITOR",
+    region="UI",
+    panel=True,
+    long_task=False,
+    shared={"audio_path": "project.audio_path"},
+    param_labels={"audio_path": "Audio File"},
+    param_order={"audio_path": 100, "bpm": 10},
+    param_subtypes={"cache_dir": "DIR_PATH"},
+    inject={"ctx": "ctx"},
+)
+def setup_from_audio(audio_path: Path, bpm: int = 120, cache_dir: str = "", ctx: Any = None):
+    ...
+</code></pre>
+<hr>
+<h2 id="core-decorator-fields"><a class="header" href="#core-decorator-fields">Core Decorator Fields</a></h2>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Field</th><th>Meaning</th></tr>
+</thead>
+<tbody>
+<tr><td><code>label</code></td><td>UI label for the generated operator</td></tr>
+<tr><td><code>idname</code></td><td>Optional Blender operator idname override</td></tr>
+<tr><td><code>description</code></td><td>Optional operator description</td></tr>
+<tr><td><code>category</code></td><td>Panel tab/category</td></tr>
+<tr><td><code>space</code></td><td>Blender editor space</td></tr>
+<tr><td><code>region</code></td><td>Blender region</td></tr>
+<tr><td><code>panel</code></td><td>Whether to include the op in generated panel UI</td></tr>
+<tr><td><code>long_task</code></td><td>Enables the long-task generator contract</td></tr>
+<tr><td><code>shared</code></td><td>Declares shared key routing by parameter</td></tr>
+<tr><td><code>param_labels</code></td><td>Overrides generated UI labels</td></tr>
+<tr><td><code>param_order</code></td><td>Controls display order; higher values render first</td></tr>
+<tr><td><code>param_subtypes</code></td><td>Overrides generated Blender property subtypes</td></tr>
+<tr><td><code>inject</code></td><td>Explicit runtime injection mapping</td></tr>
+</tbody>
+</table>
+</div>
+<p><code>v1</code> and <code>v2</code> both use the same decorator surface.</p>
+<p>Track differences apply to generated runtime behavior, not to the decorator syntax itself.</p>
+<hr>
+<h2 id="supported-parameter-types"><a class="header" href="#supported-parameter-types">Supported Parameter Types</a></h2>
+<p>QuickAddon currently supports:</p>
+<ul>
+<li><code>str</code></li>
+<li><code>int</code></li>
+<li><code>float</code></li>
+<li><code>bool</code></li>
+<li><code>pathlib.Path</code></li>
+<li><code>Literal["a", "b", ...]</code></li>
+</ul>
+<p>These generate:</p>
+<ul>
+<li><code>StringProperty</code></li>
+<li><code>IntProperty</code></li>
+<li><code>FloatProperty</code></li>
+<li><code>BoolProperty</code></li>
+<li><code>StringProperty(subtype="FILE_PATH")</code></li>
+<li><code>EnumProperty</code></li>
+</ul>
+<p>Runtime contract:</p>
+<ul>
+<li><code>pathlib.Path</code> parameters are passed to user code as <code>Path</code> objects</li>
+<li><code>str</code> parameters are passed to user code as plain strings</li>
+<li><code>param_subtypes</code> affects Blender UI only, not runtime conversion</li>
+</ul>
+<p>Not supported:</p>
+<ul>
+<li><code>*args</code></li>
+<li><code>**kwargs</code></li>
+</ul>
+<p>Unsupported parameter types fail build with QA10 diagnostics.</p>
+<hr>
+<h2 id="shared-keys"><a class="header" href="#shared-keys">Shared Keys</a></h2>
+<p>Shared values are declared by parameter name:</p>
+<pre><code class="language-python">@op(
+    shared={
+        "audio_path": "project.audio_path",
+    }
+)
+def setup_from_audio(audio_path: Path):
+    ...
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>Shared keys are stable opaque identifiers.</li>
+<li>The same shared key must keep one consistent type across all ops.</li>
+<li>Shared parameters do not appear as local popup dialog properties.</li>
+<li>Shared values are drawn in the shared inputs group instead.</li>
+</ul>
+<p>If multiple ops use the same shared key, they reference the same logical shared value.</p>
+<hr>
+<h2 id="panel"><a class="header" href="#panel">Panel</a></h2>
+<p><code>panel</code> controls whether QuickAddon includes the operator in its auto-generated
+panel UI.</p>
+<ul>
+<li><code>panel=True</code>
+<ul>
+<li>Generate and register the operator</li>
+<li>Include it in the generated panel tool list</li>
+</ul>
+</li>
+<li><code>panel=False</code>
+<ul>
+<li>Generate and register the operator</li>
+<li>Do not include it in the generated panel tool list</li>
+</ul>
+</li>
+</ul>
+<p>This is a UI composition flag only.</p>
+<p>It does <strong>not</strong>:</p>
+<ul>
+<li>remove the operator</li>
+<li>disable the operator</li>
+<li>remove parameters</li>
+<li>prevent invocation from other UI or code</li>
+</ul>
+<p>An operator with <code>panel=False</code> still exists as a normal Blender operator and can be
+invoked by <code>bl_idname</code> from menus, custom panels, keymaps, scripts, or host add-ons.</p>
+<h3 id="why-this-exists"><a class="header" href="#why-this-exists">Why This Exists</a></h3>
+<p>Most QuickAddon examples start with the default generated panel because that is the
+lowest-friction path.</p>
+<p>But QuickAddon supports a broader set of UI patterns:</p>
+<ul>
+<li>standard panel-first tools</li>
+<li>menu-driven operators</li>
+<li>host-composed tools drawn by another add-on</li>
+<li>hidden helper operators used for workflow plumbing</li>
+</ul>
+<p><code>panel</code> is what lets one generated operator model support all of those cases.</p>
+<h3 id="menu-behavior"><a class="header" href="#menu-behavior">Menu Behavior</a></h3>
+<p><code>panel=False</code> is a good fit for menu-only operators.</p>
+<p>If the operator has local parameters:</p>
+<ul>
+<li>invoking it from a menu still opens Blender’s floating properties dialog</li>
+<li>the user can enter values before execution</li>
+</ul>
+<p>If the operator has no local parameters:</p>
+<ul>
+<li>it runs immediately when invoked</li>
+</ul>
+<p>Shared parameters are different:</p>
+<ul>
+<li>shared values do not appear in the local popup dialog</li>
+<li>shared values are expected to be drawn by host/shared UI instead</li>
+</ul>
+<h3 id="interaction-with-shared"><a class="header" href="#interaction-with-shared">Interaction With <code>shared</code></a></h3>
+<p><code>panel=False</code> can be used with <code>shared</code>, but only when some other UI is responsible
+for exposing those shared values.</p>
+<p>Good fit:</p>
+<ul>
+<li>a host add-on panel already draws the shared inputs</li>
+<li>a custom UI calls generated draw helpers</li>
+<li>shared values are owned by a host integration layer</li>
+</ul>
+<p>Awkward fit:</p>
+<ul>
+<li>the generated QuickAddon panel was the only place users could edit those shared values</li>
+</ul>
+<p>Practical rule:</p>
+<ul>
+<li><code>panel=False + shared</code> is useful when another UI surface owns the shared state</li>
+<li><code>panel=False + shared</code> is confusing when no other UI exists for those shared inputs</li>
+</ul>
+<h3 id="mental-model-1"><a class="header" href="#mental-model-1">Mental Model</a></h3>
+<p><code>panel</code> answers one question:</p>
+<blockquote>
+<p>Should QuickAddon auto-surface this operator in its default panel UI?</p>
+</blockquote>
+<hr>
+<h2 id="ui-labels"><a class="header" href="#ui-labels">UI Labels</a></h2>
+<p>Use <code>param_labels</code> to override display names:</p>
+<pre><code class="language-python">@op(
+    param_labels={
+        "audio_path": "Audio File",
+        "start_frame": "Start Frame",
+    }
+)
+</code></pre>
+<p>This applies to:</p>
+<ul>
+<li>Generated local operator properties</li>
+<li>Shared input draw labels</li>
+</ul>
+<p>If you do not supply <code>param_labels</code>, QuickAddon uses the parameter name.</p>
+<h3 id="label-collision-rule"><a class="header" href="#label-collision-rule">Label Collision Rule</a></h3>
+<p>Resolved UI labels must be unique within each displayed group.</p>
+<p>That means:</p>
+<ul>
+<li>Local properties within one operator dialog must not collide</li>
+<li>Shared inputs within the shared inputs group must not collide</li>
+</ul>
+<p>Duplicate labels fail build with QA10 diagnostics.</p>
+<hr>
+<h2 id="ui-ordering"><a class="header" href="#ui-ordering">UI Ordering</a></h2>
+<p>Use <code>param_order</code> to control property order:</p>
+<pre><code class="language-python">@op(
+    param_order={
+        "audio_path": 100,
+        "bpm": 10,
+        "debug": 0,
+    }
+)
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>Higher order values appear first</li>
+<li>Parameters with the same order are sorted deterministically by UI label, then name</li>
+<li>Applies to both local properties and shared inputs</li>
+</ul>
+<p>If <code>param_order</code> is omitted, the default order value is <code>0</code>.</p>
+<hr>
+<h2 id="param_subtypes"><a class="header" href="#param_subtypes"><code>param_subtypes</code></a></h2>
+<p>Use <code>param_subtypes</code> when you want filepath-style Blender UI without changing the
+runtime Python type:</p>
+<pre><code class="language-python">@op(
+    param_subtypes={
+        "json_path": "FILE_PATH",
+        "cache_dir": "DIR_PATH",
+    }
+)
+def export_transforms(json_path: str = "", cache_dir: str = ""):
+    ...
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>Supported values are currently <code>"FILE_PATH"</code> and <code>"DIR_PATH"</code>.</li>
+<li>Valid only for <code>str</code> and <code>Path</code> parameters.</li>
+<li>For <code>Path</code>, QuickAddon still passes a <code>Path</code> object at runtime.</li>
+<li>For <code>str</code>, QuickAddon still passes a plain string at runtime.</li>
+</ul>
+<hr>
+<h2 id="long-tasks"><a class="header" href="#long-tasks">Long Tasks</a></h2>
+<p>If <code>long_task=True</code>:</p>
+<ul>
+<li>The function must be a generator</li>
+<li>Async generators are not allowed</li>
+<li>Runtime yield payloads must include <code>progress</code> and <code>total</code></li>
+</ul>
+<p>For the full contract, see <a href="#diagnostics-and-contract-enforcement">Diagnostics and Contract Enforcement</a>.</p>
+<hr>
+<h2 id="injection"><a class="header" href="#injection">Injection</a></h2>
+<p>Injection is explicit and separate from shared routing.</p>
+<p>Use:</p>
+<pre><code class="language-python">@op(
+    inject={
+        "ctx": "ctx",
+        "scene": "scene",
+    }
+)
+</code></pre>
+<p>Injected parameters:</p>
+<ul>
+<li>Do not generate UI fields</li>
+<li>Are supplied at execution time</li>
+<li>Must be declared explicitly</li>
+</ul>
+<p>For the full injection contract, see <a href="#injection-contract-v1">Injection Contract v1</a>.</p>
+<hr>
+<h2 id="strictness-notes"><a class="header" href="#strictness-notes">Strictness Notes</a></h2>
+<p>QuickAddon does not silently guess through decorator ambiguity.</p>
+<p>Examples of build failures:</p>
+<ul>
+<li>Unknown parameter referenced in <code>shared</code>, <code>param_labels</code>, <code>param_order</code>, or <code>inject</code></li>
+<li>Shared key type mismatch across ops</li>
+<li>Duplicate resolved labels within one UI group</li>
+<li>Invalid <code>long_task=True</code> contract</li>
+</ul>
+<p>Reference pages for related contracts:</p>
+<ul>
+<li><a href="#injection-contract-v1">Injection Contract v1</a></li>
+<li><a href="#quickaddon-hostapi-v2-spec">QuickAddon HostAPI v2 Spec</a></li>
+<li><a href="#v1-to-v2-migration">v1 to v2 migration</a></li>
+<li><a href="#diagnostics-and-contract-enforcement">Diagnostics and Contract Enforcement</a></li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="injection-contract-v1"><a class="header" href="#injection-contract-v1">Injection Contract v1</a></h1>
+<p>The Injection Contract defines how runtime values (such as Blender context)
+are passed into plugin functions.</p>
+<p>This system is separate from HostAPI and shared key routing.</p>
+<p>HostAPI handles shared state.
+Injection handles runtime wiring.</p>
+<hr>
+<h2 id="core-principle"><a class="header" href="#core-principle">Core Principle</a></h2>
+<p>Injection is <strong>explicit</strong>.</p>
+<p>Nothing is auto-wired.</p>
+<p>A parameter is injected only if it is declared in:</p>
+<pre><code class="language-python">@op(inject={ ... })
+</code></pre>
+<hr>
+<h2 id="basic-usage"><a class="header" href="#basic-usage">Basic Usage</a></h2>
+<pre><code class="language-python">from typing import Any
+
+@op(
+    label="Example",
+    inject={
+        "ctx": "ctx",
+        "scene": "scene",
+    },
+)
+def example(ctx: Any, scene: Any, threshold: float = 0.5):
+    ...
+</code></pre>
+<p>Parameters listed in <code>inject</code>:</p>
+<ul>
+<li>Do not generate UI fields.</li>
+<li>Are passed at operator execution time.</li>
+<li>Must match function parameter names.</li>
+</ul>
+<hr>
+<h2 id="injection-mapping"><a class="header" href="#injection-mapping">Injection Mapping</a></h2>
+<p>Injection is defined as:</p>
+<pre><code class="language-python">inject={
+    "parameter_name": "expression_or_alias",
+}
+</code></pre>
+<p>The right-hand side may be:</p>
+<h3 id="1-full-expression"><a class="header" href="#1-full-expression">1) Full Expression</a></h3>
+<p>Evaluated relative to <code>execute(self, context)</code> scope.</p>
+<p>Example:</p>
+<pre><code class="language-python">inject={
+    "ctx": "context",
+    "active_strip": "context.scene.sequence_editor.active_strip",
+}
+</code></pre>
+<p>This generates static wiring:</p>
+<pre><code class="language-python">ctx=context
+active_strip=context.scene.sequence_editor.active_strip
+</code></pre>
+<p>No dynamic <code>eval</code> is used at runtime.</p>
+<hr>
+<h3 id="2-built-in-aliases"><a class="header" href="#2-built-in-aliases">2) Built-in Aliases</a></h3>
+<p>These aliases expand to common context values:</p>
+<div class="table-wrapper">
+<table>
+<thead>
+<tr><th>Alias</th><th>Expands To</th></tr>
+</thead>
+<tbody>
+<tr><td><code>ctx</code></td><td><code>context</code></td></tr>
+<tr><td><code>scene</code></td><td><code>context.scene</code></td></tr>
+<tr><td><code>wm</code></td><td><code>context.window_manager</code></td></tr>
+<tr><td><code>area</code></td><td><code>context.area</code></td></tr>
+<tr><td><code>region</code></td><td><code>context.region</code></td></tr>
+<tr><td><code>space</code></td><td><code>context.space_data</code></td></tr>
+</tbody>
+</table>
+</div>
+<p>Example:</p>
+<pre><code class="language-python">inject={
+    "ctx": "ctx",
+}
+</code></pre>
+<p>Expands to:</p>
+<pre><code class="language-python">ctx=context
+</code></pre>
+<hr>
+<h2 id="strictness-rules"><a class="header" href="#strictness-rules">Strictness Rules</a></h2>
+<h3 id="1-injection-must-be-explicit"><a class="header" href="#1-injection-must-be-explicit">1) Injection Must Be Explicit</a></h3>
+<p>There is no automatic context injection.</p>
+<p>Even though operators receive <code>context</code>,
+it must be declared if used.</p>
+<hr>
+<h3 id="2-any-requires-injection"><a class="header" href="#2-any-requires-injection">2) <code>Any</code> Requires Injection</a></h3>
+<p>If a parameter:</p>
+<ul>
+<li>Is annotated as <code>Any</code></li>
+<li>Has no default value</li>
+<li>Is not declared in <code>inject</code></li>
+</ul>
+<p>Build fails.</p>
+<p>Example error:</p>
+<pre><code>Parameter 'ctx' is annotated as Any but not declared in @op(inject=...).
+Injection must be explicit.
+</code></pre>
+<p>This prevents accidental UI generation or ambiguous wiring.</p>
+<hr>
+<h3 id="3-unknown-alias-is-an-error"><a class="header" href="#3-unknown-alias-is-an-error">3) Unknown Alias Is an Error</a></h3>
+<p>If injection value is:</p>
+<ul>
+<li>Not a built-in alias</li>
+<li>Not a valid expression</li>
+</ul>
+<p>Build fails.</p>
+<p>No guessing.
+No silent fallback.</p>
+<hr>
+<h2 id="runtime-behavior"><a class="header" href="#runtime-behavior">Runtime Behavior</a></h2>
+<p>If an injected expression evaluates to <code>None</code>,
+the function receives <code>None</code>.</p>
+<p>Example:</p>
+<ul>
+<li><code>context.area</code> may be <code>None</code></li>
+<li><code>context.scene.sequence_editor</code> may be <code>None</code></li>
+</ul>
+<p>Handling <code>None</code> is the responsibility of the plugin author.</p>
+<hr>
+<h2 id="design-philosophy"><a class="header" href="#design-philosophy">Design Philosophy</a></h2>
+<p>Injection exists to support:</p>
+<ul>
+<li>Context-aware operators</li>
+<li>Refactoring existing addons</li>
+<li>Future extension beyond Blender context</li>
+</ul>
+<p>It does not:</p>
+<ul>
+<li>Replace shared keys</li>
+<li>Replace HostAPI</li>
+<li>Imply ownership of runtime state</li>
+</ul>
+<hr>
+<h2 id="relationship-to-hostapi"><a class="header" href="#relationship-to-hostapi">Relationship to HostAPI</a></h2>
+<p>HostAPI:</p>
+<ul>
+<li>Routes shared keys.</li>
+<li>Manages persistent state.</li>
+</ul>
+<p>Injection:</p>
+<ul>
+<li>Supplies runtime values.</li>
+<li>Has no persistence semantics.</li>
+</ul>
+<p>The two systems are orthogonal by design.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="quickaddon-hostapi-v2-spec"><a class="header" href="#quickaddon-hostapi-v2-spec">QuickAddon HostAPI v2 Spec</a></h1>
+<p>HostAPI v2 introduces <strong>scoped named instances</strong> and enables:</p>
+<ul>
+<li>Multi-instance plugins</li>
+<li>Nested composition (host-of-host)</li>
+<li>Isolated storage per plugin instance</li>
+<li>Hierarchical system construction</li>
+</ul>
+<p>HostAPI v2 replaces the single-instance model of v1.</p>
+<blockquote>
+<p>v1 and v2 are separate build tracks.</p>
+</blockquote>
+<hr>
+<h2 id="core-concepts"><a class="header" href="#core-concepts">Core Concepts</a></h2>
+<h3 id="scope"><a class="header" href="#scope">Scope</a></h3>
+<p>A <strong>scope</strong> represents one logical instance of a plugin within a host.</p>
+<p>Each mounted plugin instance receives a unique scope.</p>
+<p>All shared key routing happens inside that scope.</p>
+<p>Shared keys are no longer resolved globally.
+They are resolved as:</p>
+<pre><code>
+(scope, key)
+
+</code></pre>
+<p>Scope identity is:</p>
+<ul>
+<li>Host-defined</li>
+<li>Opaque to plugins</li>
+<li>Stable across file save/load</li>
+<li>Unique within a scene</li>
+</ul>
+<p>Plugins must not assume scope format.</p>
+<hr>
+<h3 id="bound-hostapi"><a class="header" href="#bound-hostapi">Bound HostAPI</a></h3>
+<p>HostAPI v2 introduces <code>bind()</code>.</p>
+<p><code>bind()</code> allocates (or selects) a scope and returns a HostAPI instance bound to that scope.</p>
+<p>After binding, all <code>get()</code> and <code>draw()</code> calls operate within that scope.</p>
+<p>Scope allocation may be:</p>
+<ul>
+<li><strong>Eager</strong> (during bind)</li>
+<li><strong>Lazy</strong> (during first get/draw call)</li>
+</ul>
+<p>Blender registration does not always provide reliable context,
+so hosts may defer scope materialization until runtime.</p>
+<p>Scope identity remains host-defined and opaque.</p>
+<hr>
+<h2 id="required-methods-1"><a class="header" href="#required-methods-1">Required Methods</a></h2>
+<pre><code class="language-python">class HostAPI:
+
+    def bind(
+        self,
+        context=None,
+        instance_hint: str | None = None,
+    ) -&gt; "HostAPI":
+        """
+        Allocate (or select) a scope for this plugin instance.
+        - `instance_hint` may be used to request deterministic naming
+          (e.g., "encode_A").
+        - `context` may be None; hosts may allocate lazily.
+        - Returns a HostAPI bound to that scope.
+        """
+        ...
+
+    def get(self, context, key: str, fallback_prop: str):
+        """
+        Return the value for shared key within this scope.
+
+        `fallback_prop` remains the plugin-generated property
+        name for fallback storage.
+        """
+        ...
+
+    def draw(
+        self,
+        layout,
+        context,
+        key: str,
+        fallback_prop: str,
+        *,
+        label: str | None = None,
+    ):
+        """
+        Draw UI control for shared key within this scope.
+
+        Must draw either:
+        - a host-owned property
+        - or a scoped fallback property
+        """
+        ...
+</code></pre>
+<p>These methods define the routing contract for v2.</p>
+<p><code>bind()</code> is a host/runtime mechanic.
+Generated plugin users should think in terms of explicit named instances via
+<code>mount_instance("name")</code>, not direct <code>bind()</code> calls.</p>
+<hr>
+<h2 id="public-v2-plugin-pattern"><a class="header" href="#public-v2-plugin-pattern">Public v2 Plugin Pattern</a></h2>
+<p>Generated v2 plugins expose a small explicit public pattern:</p>
+<pre><code class="language-python">plugin.register(host_api=host_api)
+plugin.mount_instance("main")
+plugin.unmount_instance("main")
+plugin.unregister()
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li><code>register()</code> prepares the hosted runtime only.</li>
+<li><code>register()</code> does <strong>not</strong> create a hidden default instance.</li>
+<li>Every usable instance is explicit and named.</li>
+<li>Internal instance keys remain opaque runtime details.</li>
+<li>Hosts should not call generated draw helpers directly.</li>
+</ul>
+<hr>
+<h2 id="scope-allocation-rules"><a class="header" href="#scope-allocation-rules">Scope Allocation Rules</a></h2>
+<ul>
+<li>Each call to <code>bind()</code> allocates or selects one scope.</li>
+<li>Scope identifiers must be unique within a scene.</li>
+<li>Scope lifetime is tied to scene data.</li>
+<li>Scope identity must remain stable across file save/load.</li>
+</ul>
+<p>Hosts may choose:</p>
+<ul>
+<li>Deterministic scope naming (recommended when the mounted instance has a stable name)</li>
+<li>Opaque auto-generated identifiers</li>
+</ul>
+<p>Plugins must treat scope identity as opaque.</p>
+<hr>
+<h2 id="storage-model"><a class="header" href="#storage-model">Storage Model</a></h2>
+<p>HostAPI v2 does not mandate a specific storage backend.</p>
+<p>Recommended fallback backend:</p>
+<pre><code>scene["qa_scope:&lt;scope_id&gt;:&lt;fallback_prop&gt;"]
+</code></pre>
+<p>IDProperties are recommended for:</p>
+<ul>
+<li>Arbitrary shared keys</li>
+<li>Multi-instance support</li>
+<li>Nested composition</li>
+<li>Dynamic routing</li>
+</ul>
+<p>Hosts may route specific <code>(scope, key)</code> pairs to typed <code>PropertyGroup</code>s via KEYMAP.</p>
+<hr>
+<h2 id="keymap-v2-structure"><a class="header" href="#keymap-v2-structure">KEYMAP v2 Structure</a></h2>
+<p>KEYMAP must become scope-aware.</p>
+<p>Hosts may implement either:</p>
+<h3 id="global-routing"><a class="header" href="#global-routing">Global Routing</a></h3>
+<pre><code class="language-python">KEYMAP_GLOBAL = {
+    "project.audio_path": ("audiodeck_props", "audio_path"),
+}
+</code></pre>
+<h3 id="scoped-override"><a class="header" href="#scoped-override">Scoped Override</a></h3>
+<pre><code class="language-python">KEYMAP_SCOPED = {
+    "&lt;scope_id&gt;": {
+        "project.bpm": ("audiodeck_props", "bpm"),
+    }
+}
+</code></pre>
+<p>Resolution order for <code>get()</code>:</p>
+<ol>
+<li>Scoped override <code>(scope_id, key)</code></li>
+<li>Global routing <code>key</code></li>
+<li>Scoped fallback storage</li>
+</ol>
+<p>Isolation is enforced by design.</p>
+<hr>
+<h2 id="nested-composition-1"><a class="header" href="#nested-composition-1">Nested Composition</a></h2>
+<p>HostAPI v2 enables nested systems.</p>
+<p>Example:</p>
+<ul>
+<li>Host A embeds Host B.</li>
+<li>Host A mounts a root plugin instance.</li>
+<li>Host-owned storage remains the ground for that tree.</li>
+<li>Parent nodes may later mount child nodes on top of the same scoped storage model.</li>
+</ul>
+<p>Scopes may be hierarchical internally,
+but hierarchy is an implementation detail of the host.</p>
+<p>Plugins remain unaware of nesting.</p>
+<hr>
+<h2 id="plugin-responsibilities"><a class="header" href="#plugin-responsibilities">Plugin Responsibilities</a></h2>
+<p>Plugins in v2:</p>
+<ul>
+<li>Must not access <code>context.scene</code> directly for shared values</li>
+<li>Must use HostAPI for all shared key resolution</li>
+<li>May declare <code>long_task=True</code> (separate contract)</li>
+<li>Must remain stateless across scopes</li>
+</ul>
+<p>Plugins declare intent.
+Hosts enforce isolation.</p>
+<hr>
+<h2 id="host-responsibilities-1"><a class="header" href="#host-responsibilities-1">Host Responsibilities</a></h2>
+<p>Hosts in v2:</p>
+<ul>
+<li>Allocate scopes during registration or lazily at runtime</li>
+<li>Own scoped storage lifecycle</li>
+<li>Maintain scope-aware routing</li>
+<li>Enforce isolation between instances</li>
+<li>Optionally expose instance management UI</li>
+</ul>
+<p>The host owns identity, routing, and lifecycle.</p>
+<hr>
+<h2 id="multi-instance-behavior"><a class="header" href="#multi-instance-behavior">Multi-Instance Behavior</a></h2>
+<p>The same plugin module may expose multiple mounted named instances.</p>
+<p>Each mounted instance receives a distinct scope.</p>
+<p>Shared keys are isolated per scope unless
+explicitly routed by the host.</p>
+<p>Isolation is the default.</p>
+<hr>
+<h2 id="instance-identity"><a class="header" href="#instance-identity">Instance Identity</a></h2>
+<p>Host-facing identity is instance-oriented.</p>
+<p>Use explicit instance names when you need deterministic labels or grouping in host UI.</p>
+<p>Plugin identity remains internal to generated artifacts and is opaque to host APIs.</p>
+<hr>
+<h2 id="upgrade-model"><a class="header" href="#upgrade-model">Upgrade Model</a></h2>
+<p>v1 and v2 are separate build tracks.</p>
+<p>Upgrade path:</p>
+<ul>
+<li>Regenerate the add-on with the v2 CLI option</li>
+<li>Plugins remain unchanged at the source level</li>
+<li>Decorator additions (if any) are minimal</li>
+<li>No runtime compatibility layer is provided</li>
+</ul>
+<p>The tracks do not mix.</p>
+<hr>
+<h2 id="design-principles"><a class="header" href="#design-principles">Design Principles</a></h2>
+<p>HostAPI v2 is based on:</p>
+<ul>
+<li>Explicit scoping</li>
+<li>Explicit instance mounting</li>
+<li>Centralized routing</li>
+<li>Host-owned execution control</li>
+<li>Composability over convenience</li>
+<li>Stability over magic</li>
+</ul>
+<p>HostAPI v2 enables QuickAddon to function as a
+composable UI architecture framework — not merely
+an add-on generator.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="v1-to-v2-migration"><a class="header" href="#v1-to-v2-migration">v1 to v2 Migration</a></h1>
+<p>QuickAddon does not provide a runtime compatibility layer between tracks.
+Migration is regeneration-based.</p>
+<h2 id="core-rule"><a class="header" href="#core-rule">Core Rule</a></h2>
+<ul>
+<li><code>v1</code> and <code>v2</code> are parallel tracks.</li>
+<li>To move to <code>v2</code>, regenerate with <code>--track v2</code>.</li>
+</ul>
+<h2 id="migration-steps"><a class="header" href="#migration-steps">Migration Steps</a></h2>
+<ol>
+<li>Keep your tool source functions and <code>@op</code> declarations.</li>
+<li>Ensure filename stem follows canonical policy: <code>^[a-z_][a-z0-9_]*$</code>.</li>
+<li>Rebuild with v2:</li>
+</ol>
+<pre><code class="language-bash">quickaddon build my_tool.py --out "$BLENDER_ADDON" --track v2 --force
+</code></pre>
+<ol start="4">
+<li>Host integration uses scoped API:</li>
+</ol>
+<ul>
+<li>register plugin in plugin mode with unbound host API</li>
+<li>mount explicit named instances with <code>mount_instance("...")</code></li>
+</ul>
+<h2 id="what-changes-operationally"><a class="header" href="#what-changes-operationally">What Changes Operationally</a></h2>
+<ul>
+<li>Shared resolution becomes scoped (<code>scope + key</code>).</li>
+<li>Host controls scope lifecycle and routing.</li>
+<li>Multiple instances of the same plugin become first-class.</li>
+<li><code>register()</code> prepares the runtime; it does not create an instance automatically.</li>
+</ul>
+<h2 id="what-stays-stable"><a class="header" href="#what-stays-stable">What Stays Stable</a></h2>
+<ul>
+<li>Tool function source logic.</li>
+<li>Shared key declarations.</li>
+<li>Injection contract model (<code>inject={...}</code>).</li>
+<li>Long-task contract (<code>long_task=True</code> generator semantics).</li>
+</ul>
+<h2 id="common-migration-errors"><a class="header" href="#common-migration-errors">Common Migration Errors</a></h2>
+<ul>
+<li>Invalid source filename stem:
+<ul>
+<li><code>QA10-FILENAME-INVALID</code></li>
+</ul>
+</li>
+<li>Attempting <code>--name</code> override:
+<ul>
+<li><code>QA10-FILENAME-OVERRIDE-DISALLOWED</code></li>
+</ul>
+</li>
+<li>Shared key type mismatch across ops:
+<ul>
+<li><code>QA10-SHARED-KEY-TYPEMISMATCH</code></li>
+</ul>
+</li>
+</ul>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="diagnostics-and-contract-enforcement"><a class="header" href="#diagnostics-and-contract-enforcement">Diagnostics and Contract Enforcement</a></h1>
+<p>QuickAddon enforces architectural contracts.</p>
+<p>Strictness is intentional.</p>
+<p>When a rule is violated, the system does not guess.
+It fails early and clearly.</p>
+<p>Each diagnostic includes:</p>
+<ul>
+<li>A stable error code</li>
+<li>File and function location (when applicable)</li>
+<li>A concise explanation</li>
+<li>A direct fix suggestion</li>
+</ul>
+<p>Error codes follow this format:</p>
+<pre><code class="language-text id=&quot;1r2bka&quot;">QA&lt;layer&gt;-&lt;area&gt;-&lt;rule&gt;
+</code></pre>
+<p>Where:</p>
+<ul>
+<li><code>QA10</code> → Build-time validation</li>
+<li><code>QA20</code> → Runtime enforcement</li>
+<li><code>area</code> → <code>LONGTASK</code>, <code>SHARED</code>, <code>HOSTAPI</code>, etc.</li>
+</ul>
+<hr>
+<h2 id="build-time-validation"><a class="header" href="#build-time-validation">Build-Time Validation</a></h2>
+<p>Build-time errors prevent invalid add-ons from being generated.</p>
+<p>These diagnostics enforce structural correctness before Blender ever loads the add-on.</p>
+<p>They are the most critical safeguards.</p>
+<hr>
+<h3 id="qa10-longtask-notgen"><a class="header" href="#qa10-longtask-notgen">QA10-LONGTASK-NOTGEN</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li><code>long_task=True</code> is declared</li>
+<li>The function contains no <code>yield</code> or <code>yield from</code></li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-text id=&quot;4vkl4b&quot;">[QA10-LONGTASK-NOTGEN] my_tool.py:42 in process_frames
+long_task=True requires a generator function (use 'yield' or 'yield from').
+</code></pre>
+<p>Fix:</p>
+<ul>
+<li>Add incremental <code>yield</code> steps</li>
+<li>Or remove <code>long_task=True</code></li>
+</ul>
+<hr>
+<h3 id="qa10-longtask-async"><a class="header" href="#qa10-longtask-async">QA10-LONGTASK-ASYNC</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li><code>async def</code> is used with <code>long_task=True</code></li>
+</ul>
+<p>Async generators are not supported.</p>
+<p>Fix:</p>
+<ul>
+<li>Use a standard generator (<code>def</code>, not <code>async def</code>)</li>
+</ul>
+<hr>
+<h3 id="qa10-shared-key-typemismatch"><a class="header" href="#qa10-shared-key-typemismatch">QA10-SHARED-KEY-TYPEMISMATCH</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li>The same shared key is declared with incompatible types across functions</li>
+</ul>
+<p>Fix:</p>
+<ul>
+<li>Ensure consistent type usage for the shared key</li>
+</ul>
+<p>Shared keys must have stable type semantics across the system.</p>
+<hr>
+<h2 id="runtime-contract-enforcement"><a class="header" href="#runtime-contract-enforcement">Runtime Contract Enforcement</a></h2>
+<p>Runtime errors occur inside Blender during execution.</p>
+<p>They indicate a contract violation that passed build validation but failed during execution.</p>
+<hr>
+<h3 id="qa20-longtask-returned-nongen"><a class="header" href="#qa20-longtask-returned-nongen">QA20-LONGTASK-RETURNED-NONGEN</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li>A <code>long_task=True</code> function returns a non-generator object at runtime</li>
+</ul>
+<p>Example:</p>
+<pre><code class="language-text id=&quot;pcv50e&quot;">[QA20-LONGTASK-RETURNED-NONGEN] process_frames
+long_task function did not return a generator.
+</code></pre>
+<p>Fix:</p>
+<ul>
+<li>Ensure the function contains <code>yield</code></li>
+<li>Ensure execution does not return early before yielding</li>
+</ul>
+<hr>
+<h3 id="qa20-longtask-yield-nondict"><a class="header" href="#qa20-longtask-yield-nondict">QA20-LONGTASK-YIELD-NONDICT</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li>The generator yields something other than a dictionary</li>
+</ul>
+<p>Fix:</p>
+<ul>
+<li>Yield a dictionary containing <code>progress</code> and <code>total</code></li>
+</ul>
+<hr>
+<h3 id="qa20-longtask-yield-missing-fields"><a class="header" href="#qa20-longtask-yield-missing-fields">QA20-LONGTASK-YIELD-MISSING-FIELDS</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li>The yield payload omits required fields</li>
+</ul>
+<p>Minimum required fields:</p>
+<pre><code class="language-text id=&quot;v9ttqf&quot;">progress
+total
+</code></pre>
+<p>Optional:</p>
+<pre><code class="language-text id=&quot;awq6d2&quot;">message
+</code></pre>
+<p>Fix:</p>
+<ul>
+<li>Include required fields in every yield</li>
+</ul>
+<p>The host relies on these fields for scheduling and progress reporting.</p>
+<hr>
+<h3 id="qa20-longtask-exception"><a class="header" href="#qa20-longtask-exception">QA20-LONGTASK-EXCEPTION</a></h3>
+<p>Triggered when:</p>
+<ul>
+<li>The generator raises an exception</li>
+</ul>
+<p>Behavior:</p>
+<ul>
+<li>Execution stops</li>
+<li>Progress UI closes</li>
+<li>The error is reported through Blender’s operator report system</li>
+</ul>
+<p>Fix:</p>
+<ul>
+<li>Correct the underlying exception</li>
+</ul>
+<p>Unhandled exceptions terminate the task immediately.</p>
+<hr>
+<h2 id="design-philosophy-1"><a class="header" href="#design-philosophy-1">Design Philosophy</a></h2>
+<p>QuickAddon diagnostics are:</p>
+<ul>
+<li>Deterministic</li>
+<li>Searchable</li>
+<li>Stable across versions</li>
+</ul>
+<p>Strictness is not punishment.</p>
+<p>It guarantees:</p>
+<ul>
+<li>Non-blocking execution</li>
+<li>Predictable routing</li>
+<li>Isolation between instances</li>
+<li>Stable nested composition</li>
+</ul>
+<p>Architectural contracts are enforced so systems remain reliable at scale.</p>
+<div style="break-before: page; page-break-before: always;"></div>
+<h1 id="qa-scaffold-cli-reference"><a class="header" href="#qa-scaffold-cli-reference">QA Scaffold CLI Reference</a></h1>
+<p><code>qa-scaffold</code> is a convention-first CLI for generating and operating QuickAddon QA scaffold projects.</p>
+<p>The workflow is Python-only and designed to hide shell orchestration behind stable subcommands.</p>
+<h2 id="command-surface"><a class="header" href="#command-surface">Command Surface</a></h2>
+<pre><code class="language-bash">qa-scaffold init &lt;path&gt;
+qa-scaffold build [--config &lt;path&gt;]
+qa-scaffold sync [--config &lt;path&gt;]
+</code></pre>
+<h2 id="standard-flow"><a class="header" href="#standard-flow">Standard Flow</a></h2>
+<ol>
+<li>Initialize scaffold:</li>
+</ol>
+<pre><code class="language-bash">qa-scaffold init ./qa_scaffolding
+</code></pre>
+<ol start="2">
+<li>Enter scaffold project and sync its environment:</li>
+</ol>
+<pre><code class="language-bash">cd qa_scaffolding
+uv sync
+</code></pre>
+<ol start="3">
+<li>Build generated addon:</li>
+</ol>
+<pre><code class="language-bash">uv run qa-scaffold build
+</code></pre>
+<ol start="4">
+<li>Build and copy to sync target:</li>
+</ol>
+<pre><code class="language-bash">uv run qa-scaffold sync
+</code></pre>
+<h2 id="config-contract"><a class="header" href="#config-contract">Config Contract</a></h2>
+<p>Default config file in scaffold root:</p>
+<pre><code class="language-text">qa_scaffold.toml
+</code></pre>
+<p>Typical defaults:</p>
+<pre><code class="language-toml">plugin_script = "src/sample_plugin.py"
+out_dir = "build/addons"
+sync_dir = "build/synced"
+track = "v2"
+force = true
+doctor = true
+blender = "4.0"
+</code></pre>
+<p>Rules:</p>
+<ul>
+<li>Config paths are resolved relative to the config file location.</li>
+<li><code>track</code> must be <code>v1</code> or <code>v2</code>.</li>
+<li><code>sync</code> runs <code>build</code> first, then copies output to <code>sync_dir</code>.</li>
+</ul>
+<h2 id="convention-policy"><a class="header" href="#convention-policy">Convention Policy</a></h2>
+<ul>
+<li>Users should not run shell scripts directly for scaffold operations.</li>
+<li>Canonical execution path is <code>uv run qa-scaffold &lt;subcommand&gt;</code>.</li>
+<li>Plugin identity still follows QuickAddon filename-stem policy.</li>
+</ul>
+<h2 id="output-layout"><a class="header" href="#output-layout">Output Layout</a></h2>
+<p>After build/sync, expected structure is:</p>
+<pre><code class="language-text">&lt;scaffold&gt;/build/addons/&lt;plugin_stem&gt;/...
+&lt;scaffold&gt;/build/synced/&lt;plugin_stem&gt;/...
+</code></pre>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+
+            </nav>
+
+        </div>
+
+        <template id=fa-eye><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M288 32c-80.8 0-145.5 36.8-192.6 80.6C48.6 156 17.3 208 2.5 243.7c-3.3 7.9-3.3 16.7 0 24.6C17.3 304 48.6 356 95.4 399.4C142.5 443.2 207.2 480 288 480s145.5-36.8 192.6-80.6c46.8-43.5 78.1-95.4 93-131.1c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C433.5 68.8 368.8 32 288 32zM432 256c0 79.5-64.5 144-144 144s-144-64.5-144-144s64.5-144 144-144s144 64.5 144 144zM288 192c0 35.3-28.7 64-64 64c-11.5 0-22.3-3-31.6-8.4c-.2 2.8-.4 5.5-.4 8.4c0 53 43 96 96 96s96-43 96-96s-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6z"/></svg></span></template>
+        <template id=fa-eye-slash><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M38.8 5.1C28.4-3.1 13.3-1.2 5.1 9.2S-1.2 34.7 9.2 42.9l592 464c10.4 8.2 25.5 6.3 33.7-4.1s6.3-25.5-4.1-33.7L525.6 386.7c39.6-40.6 66.4-86.1 79.9-118.4c3.3-7.9 3.3-16.7 0-24.6c-14.9-35.7-46.2-87.7-93-131.1C465.5 68.8 400.8 32 320 32c-68.2 0-125 26.3-169.3 60.8L38.8 5.1zM223.1 149.5C248.6 126.2 282.7 112 320 112c79.5 0 144 64.5 144 144c0 24.9-6.3 48.3-17.4 68.7L408 294.5c5.2-11.8 8-24.8 8-38.5c0-53-43-96-96-96c-2.8 0-5.6 .1-8.4 .4c5.3 9.3 8.4 20.1 8.4 31.6c0 10.2-2.4 19.8-6.6 28.3l-90.3-70.8zm223.1 298L373 389.9c-16.4 6.5-34.3 10.1-53 10.1c-79.5 0-144-64.5-144-144c0-6.9 .5-13.6 1.4-20.2L83.1 161.5C60.3 191.2 44 220.8 34.5 243.7c-3.3 7.9-3.3 16.7 0 24.6c14.9 35.7 46.2 87.7 93 131.1C174.5 443.2 239.2 480 320 480c47.8 0 89.9-12.9 126.2-32.5z"/></svg></span></template>
+        <template id=fa-copy><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M502.6 70.63l-61.25-61.25C435.4 3.371 427.2 0 418.7 0H255.1c-35.35 0-64 28.66-64 64l.0195 256C192 355.4 220.7 384 256 384h192c35.2 0 64-28.8 64-64V93.25C512 84.77 508.6 76.63 502.6 70.63zM464 320c0 8.836-7.164 16-16 16H255.1c-8.838 0-16-7.164-16-16L239.1 64.13c0-8.836 7.164-16 16-16h128L384 96c0 17.67 14.33 32 32 32h47.1V320zM272 448c0 8.836-7.164 16-16 16H63.1c-8.838 0-16-7.164-16-16L47.98 192.1c0-8.836 7.164-16 16-16H160V128H63.99c-35.35 0-64 28.65-64 64l.0098 256C.002 483.3 28.66 512 64 512h192c35.2 0 64-28.8 64-64v-32h-47.1L272 448z"/></svg></span></template>
+        <template id=fa-play><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 384 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M73 39c-14.8-9.1-33.4-9.4-48.5-.9S0 62.6 0 80V432c0 17.4 9.4 33.4 24.5 41.9s33.7 8.1 48.5-.9L361 297c14.3-8.7 23-24.2 23-41s-8.7-32.2-23-41L73 39z"/></svg></span></template>
+        <template id=fa-clock-rotate-left><span class=fa-svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2022 Fonticons, Inc. --><path d="M75 75L41 41C25.9 25.9 0 36.6 0 57.9V168c0 13.3 10.7 24 24 24H134.1c21.4 0 32.1-25.9 17-41l-30.8-30.8C155 85.5 203 64 256 64c106 0 192 86 192 192s-86 192-192 192c-40.8 0-78.6-12.7-109.7-34.4c-14.5-10.1-34.4-6.6-44.6 7.9s-6.6 34.4 7.9 44.6C151.2 495 201.7 512 256 512c141.4 0 256-114.6 256-256S397.4 0 256 0C185.3 0 121.3 28.7 75 75zm181 53c-13.3 0-24 10.7-24 24V256c0 6.4 2.5 12.5 7 17l72 72c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-65-65V152c0-13.3-10.7-24-24-24z"/></svg></span></template>
+
+
+
+        <script>
+            window.playground_copyable = true;
+        </script>
+
+
+        <script src="elasticlunr-ef4e11c1.min.js"></script>
+        <script src="mark-09e88c2c.min.js"></script>
+        <script src="searcher-c2a407aa.js"></script>
+
+        <script src="clipboard-1626706a.min.js"></script>
+        <script src="highlight-abc7f01d.js"></script>
+        <script src="book-a0b12cfe.js"></script>
+
+        <!-- Custom JS scripts -->
+
+        <script>
+        window.addEventListener('load', function() {
+            window.setTimeout(window.print, 100);
+        });
+        </script>
+
+
+    </div>
+    </body>
+</html>
